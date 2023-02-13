@@ -1,0 +1,93 @@
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.List;
+
+public class BRD {
+    public static boolean validateDataType(Object fieldValue, String dataType) {
+        switch(dataType) {
+            case "Numeric":
+                return fieldValue instanceof Number;
+            case "String":
+                return fieldValue instanceof String;
+            case "Boolean":
+                return fieldValue instanceof Boolean;
+            case "Date":
+                return fieldValue instanceof Date;
+            // add more cases for other data types
+            default:
+                return false;
+        }
+    }
+    
+    public static boolean validateDataLength(String fieldValue, int maxLength) {
+        return fieldValue.length() <= maxLength;
+    }
+    
+    
+    
+    public static boolean validateSpecialCharacters(String fieldValue, String specialCharacters) {
+        for (int i = 0; i < specialCharacters.length(); i++) {
+            if (fieldValue.contains(String.valueOf(specialCharacters.charAt(i)))) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    
+    
+    public static boolean validateDomainValue(Object fieldValue, List<Object> validValues) {
+        return validValues.contains(fieldValue);
+    }
+    
+    
+    
+    public static boolean validateFormat(String fieldValue, String format) {
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+            simpleDateFormat.parse(fieldValue);
+            return true;
+        } catch (ParseException e) {
+            return false;
+        }
+    }
+    
+    
+    public static boolean validateEmail(String fieldValue) {
+        return fieldValue.contains("@") && fieldValue.contains(".") && !fieldValue.contains(" ");
+    }
+
+    public static void main(String[] args) {
+        Object customerId = 123456;
+        Object customerName = "Harsh Ranjan";
+        Object isActive = true;
+        Object dateOfBirth = new Date(0);
+        Object dayOfWeek = "Monday";
+
+        System.out.println("Data Type Validation for customerId: " + BRD.validateDataType(customerId, "Numeric"));
+        System.out.println("Data Type Validation for customerName: " + BRD.validateDataType(customerName, "String"));
+        System.out.println("Data Type Validation for isActive: " + BRD.validateDataType(isActive, "Boolean"));
+        System.out.println("Data Type Validation for dateOfBirth: " + BRD.validateDataType(dateOfBirth, "Date"));
+
+        System.out.println("Data Length Validation for customerId: " + BRD.validateDataLength(customerId.toString(), 10));
+        System.out.println("Data Length Validation for customerName: " + BRD.validateDataLength(customerName.toString(), 15));
+
+        System.out.println("Special Characters Validation for customerName: " + BRD.validateSpecialCharacters(customerName.toString(), "@#$%"));
+
+        List<Object> validDays = Arrays.asList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
+        System.out.println("Domain Value Validation for dayOfWeek: " + BRD.validateDomainValue(dayOfWeek, validDays));
+
+        System.out.println("Format Validation for dateOfBirth: " + BRD.validateFormat(dateOfBirth.toString(), "MM/dd/yyyy"));
+
+        String email = "harsh.rajan@nucleussoftware.com";
+        System.out.println("Email Validation for email: " + BRD.validateEmail(email));
+    }
+}
+
+
+
+
+
+
