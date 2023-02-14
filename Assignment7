@@ -1,0 +1,39 @@
+1. Write a program to demonstrate the use of try, catch, finally throw and throws keywords and 
+demonstrate the following points in the program. 
+a) Multiple catch blocks. 
+b) try-catch-finally combination. 
+c) try-finally combination. 
+d) Exception propagation among many methods. 
+e) Nested try blocks 
+
+
+
+
+2. Write a program to throw a checked exception explicitly using 'throw' keyword and 
+a) Handle the exception in same method. 
+b) use throws clause and handle the exception in some other method (calling method) 
+c) Don't either handle or use the throws clause. 
+
+
+
+
+3. Write a program to throw an unchecked exception explicitly using 'throw' keyword and 
+a) Handle the exception in same method.
+b) use throws clause and handle the exception in some other method (calling method) 
+c) Don't either handle or use the throws clause. 
+
+
+
+
+4. Write a program in which main method calls the foo method which calls the bar method. Bar 
+method can throw a checked exception. Use throws for throwing the exception from bar. Don’t 
+handle exception in bar using try catch. Let the calling function handle the same. 
+
+
+5. Create a User defined exception – LoanNotApprovedException. In case the given criteria of 
+Loan approval doesn’t match, the exception must be thrown. The Loan Approval criterions for 
+different type of loans are available in Eligibility.txt file. The exception should specifically give 
+details about the mismatched criteria because of which the loan could not be approved. 
+
+
+
