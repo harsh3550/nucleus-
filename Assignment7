@@ -6,6 +6,85 @@ c) try-finally combination.
 d) Exception propagation among many methods. 
 e) Nested try blocks 
 
+Answer:
+
+
+public class ExceptionHandling {
+
+    public static void main(String[] args) {
+        try {
+            int result = divide(10, 0);
+            System.out.println("Result: " + result);
+        } catch (ArithmeticException ex) {
+            System.out.println("Error: " + ex.getMessage());
+        } catch (Exception ex) {
+            System.out.println("Unknown error occurred.");
+        } finally {
+            System.out.println("This block is always executed.");
+        }
+
+        try {
+            int[] array = { 1, 2, 3 };
+            System.out.println("Element at index 4: " + array[4]);
+        } catch (ArrayIndexOutOfBoundsException ex) {
+            System.out.println("Error: " + ex.getMessage());
+        } finally {
+            System.out.println("This block is always executed.");
+        }
+
+        try {
+            String str = null;
+            System.out.println(str.length());
+        } finally {
+            System.out.println("This block is always executed.");
+        }
+
+        try {
+            doSomething();
+        } catch (Exception ex) {
+            System.out.println("Error: " + ex.getMessage());
+        }
+
+        try {
+            try {
+                int[] array = { 1, 2, 3 };
+                System.out.println("Element at index 4: " + array[4]);
+            } catch (ArrayIndexOutOfBoundsException ex) {
+                System.out.println("Inner catch: " + ex.getMessage());
+                throw new Exception("Error occurred in inner catch block.", ex);
+            }
+        } catch (Exception ex) {
+            System.out.println("Outer catch: " + ex.getMessage());
+        }
+    }
+
+    public static int divide(int num, int den) throws ArithmeticException {
+        if (den == 0) {
+            throw new ArithmeticException("Cannot divide by zero.");
+        }
+        return num / den;
+    }
+
+    public static void doSomething() throws Exception {
+        throw new Exception("Something went wrong.");
+    }
+}
+
+
+
+
+Here's what each part of the program demonstrates:
+
+a) Multiple catch blocks: The program defines multiple catch blocks for different types of exceptions. If a matching exception is thrown in the try block, the corresponding catch block will be executed.
+
+b) try-catch-finally combination: The program uses a try-catch-finally combination to catch and handle an exception. The finally block is always executed, even if an exception is not thrown.
+
+c) try-finally combination: The program uses a try-finally combination to demonstrate that the finally block is always executed, even if an exception is not thrown.
+
+d) Exception propagation among many methods: The program demonstrates exception propagation by throwing an exception in the doSomething method and catching it in the main method.
+
+e) Nested try blocks: The program demonstrates nested try blocks by catching an exception in the inner try block and throwing a new exception in the outer try block.
+
 
 
 
@@ -13,6 +92,72 @@ e) Nested try blocks
 a) Handle the exception in same method. 
 b) use throws clause and handle the exception in some other method (calling method) 
 c) Don't either handle or use the throws clause. 
+
+
+
+import java.io.FileNotFoundException;
+
+public class Main {
+    public static void main(String[] args) {
+        // a) Handle the exception in the same method
+        try {
+            openFile("file.txt");
+        } catch (FileNotFoundException ex) {
+            System.out.println("Error: " + ex.getMessage());
+        }
+
+        // b) Use throws clause and handle the exception in some other method (calling method)
+        try {
+            readFile("file.txt");
+        } catch (FileNotFoundException ex) {
+            System.out.println("Error: " + ex.getMessage());
+        }
+
+        // c) Don't either handle or use the throws clause
+        openFileUnchecked("file.txt");
+    }
+
+    public static void openFile(String filename) throws FileNotFoundException {
+        if (!filename.equals("file.txt")) {
+            throw new FileNotFoundException("File not found.");
+        }
+        System.out.println("File opened successfully.");
+    }
+
+    public static void readFile(String filename) throws FileNotFoundException {
+        openFile(filename);
+        System.out.println("File read successfully.");
+    }
+
+    public static void openFileUnchecked(String filename) {
+        if (!filename.equals("file.txt")) {
+            throw new RuntimeException("File not found.");
+        }
+        System.out.println("File opened successfully.");
+    }
+}
+
+
+
+
+
+
+In the above program, we have a method openFile that throws a checked exception FileNotFoundException explicitly using the throw keyword.
+
+To demonstrate the different ways of handling the exception, we have:
+
+a) The openFile method is called directly from the main method, and the exception is handled using a try-catch block within the same method.
+
+b) The readFile method calls the openFile method and declares the FileNotFoundException exception using the throws clause. The exception is handled in the calling method, main, using a try-catch block.
+
+c) The openFileUnchecked method also throws an exception, but it is an unchecked exception, RuntimeException. This method is called from the main method, but neither the exception is handled nor the throws clause is used.
+
+When we run the Main class, it will showcase how the different ways of handling the exception work. The first two methods, openFile and readFile, will require the exception to be handled or declared, while the last method, openFileUnchecked, can be called without handling the exception or declaring it.
+
+
+
+
+
 
 
 
@@ -24,16 +169,212 @@ c) Don't either handle or use the throws clause.
 
 
 
+public class Main {
+    public static void main(String[] args) {
+        // a) Handle the exception in the same method
+        try {
+            divide(10, 0);
+        } catch (ArithmeticException ex) {
+            System.out.println("Error: " + ex.getMessage());
+        }
+
+        // b) Use throws clause and handle the exception in some other method (calling method)
+        try {
+            calculate(10, 0);
+        } catch (ArithmeticException ex) {
+            System.out.println("Error: " + ex.getMessage());
+        }
+
+        // c) Don't either handle or use the throws clause
+        divideUnchecked(10, 0);
+    }
+
+    public static void divide(int a, int b) {
+        if (b == 0) {
+            throw new ArithmeticException("Cannot divide by zero.");
+        }
+        System.out.println(a + " / " + b + " = " + (a / b));
+    }
+
+    public static void calculate(int a, int b) throws ArithmeticException {
+        divide(a, b);
+        System.out.println("Calculation complete.");
+    }
+
+    public static void divideUnchecked(int a, int b) {
+        if (b == 0) {
+            throw new RuntimeException("Cannot divide by zero.");
+        }
+        System.out.println(a + " / " + b + " = " + (a / b));
+    }
+}
+
+
+
+
+
+
+In the above program, we have a method divide that throws an unchecked exception ArithmeticException explicitly using the throw keyword.
+
+To demonstrate the different ways of handling the exception, we have:
+
+a) The divide method is called directly from the main method, and the exception is handled using a try-catch block within the same method.
+
+b) The calculate method calls the divide method and declares the ArithmeticException exception using the throws clause. The exception is handled in the calling method, main, using a try-catch block.
+
+c) The divideUnchecked method also throws an exception, but it is an unchecked exception, RuntimeException. This method is called from the main method, but neither the exception is handled nor the throws clause is used.
+
+When we run the Main class, it will showcase how the different ways of handling the exception work. The first two methods, divide and calculate, will require the exception to be handled or declared, while the last method, divideUnchecked, can be called without handling the exception or declaring it.
+
+
+
+
+
+
 
 4. Write a program in which main method calls the foo method which calls the bar method. Bar 
 method can throw a checked exception. Use throws for throwing the exception from bar. Don’t 
 handle exception in bar using try catch. Let the calling function handle the same. 
 
 
+
+public class Main {
+    public static void main(String[] args) {
+        try {
+            foo();
+        } catch (Exception ex) {
+            System.out.println("Error: " + ex.getMessage());
+        }
+    }
+
+    public static void foo() throws Exception {
+        bar();
+    }
+
+    public static void bar() throws Exception {
+        throw new Exception("Something went wrong in bar method.");
+    }
+}
+
+
+
+In the above program, we have three methods: main, foo, and bar. The main method calls the foo method, which in turn calls the bar method.
+
+The bar method throws a checked exception Exception, which is declared using the throws keyword. However, the bar method does not handle the exception using a try-catch block.
+
+Instead, the foo method also declares the Exception exception using the throws keyword. Therefore, the checked exception is propagated from the bar method to the foo method.
+
+Finally, the main method handles the exception using a try-catch block, as it is the method that calls the foo method.
+
+When we run the Main class, it will output the error message "Something went wrong in bar method.", which is the exception message thrown by the bar method.
+
+
+
+
 5. Create a User defined exception – LoanNotApprovedException. In case the given criteria of 
 Loan approval doesn’t match, the exception must be thrown. The Loan Approval criterions for 
 different type of loans are available in Eligibility.txt file. The exception should specifically give 
 details about the mismatched criteria because of which the loan could not be approved. 
+
+
+
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+class LoanNotApprovedException extends Exception {
+    public LoanNotApprovedException(String message) {
+        super(message);
+    }
+}
+
+class Loan {
+    private String type;
+    private int age;
+    private int income;
+
+    public Loan(String type, int age, int income) {
+        this.type = type;
+        this.age = age;
+        this.income = income;
+    }
+
+    public boolean isEligible() throws LoanNotApprovedException {
+        boolean eligible = false;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader("Eligibility.txt"))) {
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                String[] criteria = line.split(",");
+                String loanType = criteria[0].trim();
+
+                if (type.equalsIgnoreCase(loanType)) {
+                    int minAge = Integer.parseInt(criteria[1].trim());
+                    int maxAge = Integer.parseInt(criteria[2].trim());
+                    int minIncome = Integer.parseInt(criteria[3].trim());
+
+                    if (age >= minAge && age <= maxAge && income >= minIncome) {
+                        eligible = true;
+                        break;
+                    } else {
+                        String message = String.format(
+                            "Loan not approved due to mismatch in eligibility criteria. " +
+                            "Age should be between %d and %d, and income should be at least %d.",
+                            minAge, maxAge, minIncome
+                        );
+                        throw new LoanNotApprovedException(message);
+                    }
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return eligible;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Loan loan = new Loan("Personal", 25, 50000);
+
+        try {
+            boolean isEligible = loan.isEligible();
+
+            if (isEligible) {
+                System.out.println("Loan approved.");
+            } else {
+                System.out.println("Loan not approved.");
+            }
+
+        } catch (LoanNotApprovedException e) {
+            System.out.println("Loan not approved due to following reason: " + e.getMessage());
+        }
+    }
+}
+
+
+
+In the above program, we create a custom exception LoanNotApprovedException that extends the Exception class. We use this exception to handle loan approval criteria mismatches.
+
+We define a Loan class that has three fields - type, age, and income - that represent the loan type, borrower age, and borrower income, respectively.
+
+We also define a method isEligible in the Loan class that reads the loan approval criteria from a file called Eligibility.txt, checks if the borrower satisfies the criteria, and returns a boolean value indicating whether the borrower is eligible for the loan or not.
+
+If the borrower does not satisfy the loan approval criteria, we throw a LoanNotApprovedException exception with a message that indicates the reason for the mismatch.
+
+In the Main class, we create a Loan object with some values for the loan type, age, and income. We then call the isEligible method on this object to check if the borrower is eligible for the loan.
+
+If the borrower is eligible, we print a message indicating that the loan is approved. If the borrower is not eligible, we catch the LoanNotApprovedException exception and print a message indicating the reason for the loan not being approved.
+
+
+
+
+
+
 
 
 
