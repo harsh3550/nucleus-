@@ -1,0 +1,59 @@
+1. Test the following functionalities : 
+a. Create class – MyClass in package pack1. Create 4 method in this class with four 
+different access specifiers – private, default, protected, public. 
+b. Create a class TestClass outside the package and test which all methods are 
+accessible. 
+c. Now create another class in package pack1 and test which all methods of 
+MyClass are accessible and how 
+d. Create a subclass of MyClass in package pack1 and test which all methods of 
+MyClass are accessible and how 
+e. Create a subclass of MyClass outside package pack1 and test which all methods 
+of MyClass are accessible and how 
+f. Create a package inside pack1 with the name subpack1. Create a class inside this 
+subpack1 and test which all methods of MyClass are accessible and how 
+g. In the subpack1, create a class which is subclass of MyClass and test which all 
+methods of MyClass are accessible and how 
+
+
+
+
+
+2. Combine all the classes created named below now into a single application and there 
+must be a single MainClass as the starting point of the application. Segregate the 
+classes and interfaces according to their functionalities in different packages. The 
+logically related classes should be in same package. Check for the access specifiers 
+which you have already placed for variables, constructors and method. Test which all 
+access specifiers need to be used and why. 
+The classes which need to be combined in a single application are:
+a. Customer
+b. LoanAgreement
+c. LoanProduct and its subclasses
+d. Interfaces
+e. Bank
+
+
+
+
+
+3. Create an interface ‘MyIterator’ as mentioned below: 
+ 
+The functionalities of the methods are as mentioned below: 
+a. hasNext() : returns true/false based on whether there is next element in the 
+array or not 
+b. next(): returns the next object from the array 
+c. remove(): deletes the object at the current array position and places Null at that 
+index position. 
+
+
+
+
+4. Implement this interface as an InnerClass in Bank class to iterator over array of Customer 
+Objects. Simultaneously remove all the objects where the monthlyIncome of the customer 
+is less than 5lac. 
+
+
+
+5. Implement all 4 types of Inner Classes implementing the same interface
+
+
+
