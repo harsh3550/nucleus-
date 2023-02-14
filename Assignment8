@@ -1,18 +1,112 @@
 1. Test the following functionalities : 
 a. Create class – MyClass in package pack1. Create 4 method in this class with four 
 different access specifiers – private, default, protected, public. 
+
+package pack1;
+
+public class MyClass {
+   private void method1() {
+      System.out.println("This is a private method.");
+   }
+   
+   void method2() {
+      System.out.println("This is a default method.");
+   }
+   
+   protected void method3() {
+      System.out.println("This is a protected method.");
+   }
+   
+   public void method4() {
+      System.out.println("This is a public method.");
+   }
+}
+
+
+
+
 b. Create a class TestClass outside the package and test which all methods are 
 accessible. 
+
+public class TestClass {
+   public static void main(String[] args) {
+      MyClass obj = new MyClass();
+      obj.method4(); // Accessible
+      // obj.method3(); Not accessible (protected access)
+      // obj.method2(); Not accessible (default access)
+      // obj.method1(); Not accessible (private access)
+   }
+}
+
+
+
 c. Now create another class in package pack1 and test which all methods of 
 MyClass are accessible and how 
+
+
+package pack1;
+
+public class AnotherClass {
+   public static void main(String[] args) {
+      MyClass obj = new MyClass();
+      obj.method4(); // Accessible
+      obj.method3(); // Accessible
+      obj.method2(); // Accessible
+      // obj.method1(); Not accessible (private access)
+   }
+}
+
+
+
 d. Create a subclass of MyClass in package pack1 and test which all methods of 
 MyClass are accessible and how 
+
+package pack1;
+
+public class SubClass extends MyClass {
+   public static void main(String[] args) {
+      SubClass obj = new SubClass();
+      obj.method4(); // Accessible
+      obj.method3(); // Accessible
+      obj.method2(); // Accessible
+      // obj.method1(); Not accessible (private access)
+   }
+}
+
+
+
 e. Create a subclass of MyClass outside package pack1 and test which all methods 
 of MyClass are accessible and how 
+
+public class SubClassOutside extends pack1.MyClass {
+   public static void main(String[] args) {
+      SubClassOutside obj = new SubClassOutside();
+      obj.method4(); // Accessible
+      // obj.method3(); Not accessible (protected access)
+      // obj.method2(); Not accessible (default access)
+      // obj.method1(); Not accessible (private access)
+   }
+}
+
+
 f. Create a package inside pack1 with the name subpack1. Create a class inside this 
 subpack1 and test which all methods of MyClass are accessible and how 
+
+package pack1.subpack1;
+
+
 g. In the subpack1, create a class which is subclass of MyClass and test which all 
 methods of MyClass are accessible and how 
+
+public class SubClassInSubPack extends pack1.MyClass {
+   public static void main(String[] args) {
+      SubClassInSubPack obj = new SubClassInSubPack();
+      obj.method4(); // Accessible (public access)
+      obj.method3(); // Accessible (protected access)
+      obj.method2(); // Accessible (default access)
+      // obj.method1(); Not accessible (private access)
+   }
+}
 
 
 
@@ -33,6 +127,139 @@ e. Bank
 
 
 
+// Package for Customer class
+package customer;
+
+public class Customer {
+   private String name;
+   private String address;
+   private String email;
+
+   public Customer(String name, String address, String email) {
+      this.name = name;
+      this.address = address;
+      this.email = email;
+   }
+
+   public String getName() {
+      return name;
+   }
+
+   public String getAddress() {
+      return address;
+   }
+
+   public String getEmail() {
+      return email;
+   }
+}
+
+// Package for LoanAgreement class
+package loan;
+
+import customer.Customer;
+
+public class LoanAgreement {
+   private Customer customer;
+   private double loanAmount;
+   private int loanDuration;
+
+   public LoanAgreement(Customer customer, double loanAmount, int loanDuration) {
+      this.customer = customer;
+      this.loanAmount = loanAmount;
+      this.loanDuration = loanDuration;
+   }
+
+   public Customer getCustomer() {
+      return customer;
+   }
+
+   public double getLoanAmount() {
+      return loanAmount;
+   }
+
+   public int getLoanDuration() {
+      return loanDuration;
+   }
+}
+
+// Package for LoanProduct and its subclasses
+package loan.product;
+
+public abstract class LoanProduct {
+   private double interestRate;
+
+   public LoanProduct(double interestRate) {
+      this.interestRate = interestRate;
+   }
+
+   public double getInterestRate() {
+      return interestRate;
+   }
+
+   public abstract double calculateMonthlyPayment();
+}
+
+public class HomeLoanProduct extends LoanProduct {
+   public HomeLoanProduct(double interestRate) {
+      super(interestRate);
+   }
+
+   @Override
+   public double calculateMonthlyPayment() {
+      // Calculate monthly payment for home loan
+   }
+}
+
+public class CarLoanProduct extends LoanProduct {
+   public CarLoanProduct(double interestRate) {
+      super(interestRate);
+   }
+
+   @Override
+   public double calculateMonthlyPayment() {
+      // Calculate monthly payment for car loan
+   }
+}
+
+// Package for Interfaces
+package loan.interfaces;
+
+public interface LoanCalculator {
+   double calculateMonthlyPayment();
+}
+
+// Package for Bank class
+package bank;
+
+import customer.Customer;
+import loan.LoanAgreement;
+import loan.product.LoanProduct;
+import loan.interfaces.LoanCalculator;
+
+public class Bank {
+   public void processLoan(Customer customer, LoanProduct loanProduct, LoanAgreement loanAgreement) {
+      // Process loan for the customer
+   }
+}
+
+// Package for Main class
+package main;
+
+import bank.Bank;
+import customer.Customer;
+import loan.LoanAgreement;
+import loan.product.HomeLoanProduct;
+
+public class MainClass {
+   public static void main(String[] args) {
+      Bank bank = new Bank();
+      Customer customer = new Customer("John Doe", "123 Main St", "johndoe@example.com");
+      LoanAgreement loanAgreement = new Loan
+
+
+
+
 
 
 3. Create an interface ‘MyIterator’ as mentioned below: 
@@ -46,10 +273,48 @@ index position.
 
 
 
+public interface MyIterator {
+  boolean hasNext();
+  Object next();
+  void remove();
+}
+
+
 
 4. Implement this interface as an InnerClass in Bank class to iterator over array of Customer 
 Objects. Simultaneously remove all the objects where the monthlyIncome of the customer 
 is less than 5lac. 
+
+
+class Bank {
+  private Customer[] customers;
+
+  class BankIterator implements MyIterator {
+    int currentIndex = 0;
+
+    @Override
+    public boolean hasNext() {
+      return currentIndex < customers.length && customers[currentIndex] != null;
+    }
+
+    @Override
+    public Object next() {
+      return customers[currentIndex++];
+    }
+
+    @Override
+    public void remove() {
+      if (customers[currentIndex].getMonthlyIncome() < 5_00_000) {
+        customers[currentIndex] = null;
+      }
+    }
+  }
+
+  public MyIterator iterator() {
+    return new BankIterator();
+  }
+}
+
 
 
 
@@ -57,3 +322,90 @@ is less than 5lac.
 
 
 
+class OuterClass {
+  private int outerField;
+
+  // Static Nested Class
+  static class StaticNestedClass implements MyIterator {
+    @Override
+    public boolean hasNext() {
+      return false;
+    }
+
+    @Override
+    public Object next() {
+      return null;
+    }
+
+    @Override
+    public void remove() { }
+  }
+
+  // Member Inner Class
+  class MemberInnerClass implements MyIterator {
+    @Override
+    public boolean hasNext() {
+      return false;
+    }
+
+    @Override
+    public Object next() {
+      return null;
+    }
+
+    @Override
+    public void remove() { }
+  }
+
+  // Local Inner Class
+  public MyIterator localInnerClass() {
+    class LocalInnerClass implements MyIterator {
+      @Override
+      public boolean hasNext() {
+        return false;
+      }
+
+      @Override
+      public Object next() {
+        return null;
+      }
+
+      @Override
+      public void remove() { }
+    }
+
+    return new LocalInnerClass();
+  }
+
+  // Anonymous Inner Class
+  public MyIterator anonymousInnerClass() {
+    return new MyIterator() {
+      @Override
+      public boolean hasNext() {
+        return false;
+      }
+
+      @Override
+      public Object next() {
+        return null;
+      }
+
+      @Override
+      public void remove() { }
+    };
+  }
+}
+
+
+
+
+
+
+
+In the above implementation, there are 4 types of inner classes defined within the OuterClass:
+
+StaticNestedClass is a static nested class.
+MemberInnerClass is a member inner class.
+LocalInnerClass is a local inner class and is defined within a method.
+The anonymous inner class is an anonymous inner class and is defined within a method.
+All the inner classes implement the MyIterator interface and provide a basic implementation for its methods.
