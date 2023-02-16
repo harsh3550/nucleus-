@@ -17,9 +17,75 @@ i. Using for loop
 ii. Using for-each loop
 iii. Using Iterator Interface
 iv. Print backward using ListIterator interface.
-
 d. Remove all the instances from the list who have salary less than 10000. Use Iterator 
 interface to perform the functionality.
+
+
+
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.ListIterator;
+
+public class EmployeeDemo {
+    public static void main(String[] args) {
+        // Create an ArrayList of Employee objects
+        ArrayList<Employee> employeeList = new ArrayList<>();
+
+        // Add Employee objects in the list
+        employeeList.add(new Employee(1, "John", 15000));
+        employeeList.add(new Employee(2, "Jane", 12000));
+        employeeList.add(new Employee(3, "Bob", 8000));
+        employeeList.add(new Employee(4, "Mary", 18000));
+
+        // Remove the object at a particular index
+        employeeList.remove(2);
+
+        // Print the list using for loop
+        System.out.println("Using for loop:");
+        for (int i = 0; i < employeeList.size(); i++) {
+            System.out.println(employeeList.get(i).getEmpName() + " " + employeeList.get(i).getSalary());
+        }
+
+        // Print the list using for-each loop
+        System.out.println("\nUsing for-each loop:");
+        for (Employee employee : employeeList) {
+            System.out.println(employee.getEmpName() + " " + employee.getSalary());
+        }
+
+        // Print the list using Iterator interface
+        System.out.println("\nUsing Iterator interface:");
+        Iterator<Employee> iterator = employeeList.iterator();
+        while (iterator.hasNext()) {
+            Employee employee = iterator.next();
+            System.out.println(employee.getEmpName() + " " + employee.getSalary());
+        }
+
+        // Print the list backward using ListIterator interface
+        System.out.println("\nPrint backward using ListIterator interface:");
+        ListIterator<Employee> listIterator = employeeList.listIterator(employeeList.size());
+        while (listIterator.hasPrevious()) {
+            Employee employee = listIterator.previous();
+            System.out.println(employee.getEmpName() + " " + employee.getSalary());
+        }
+
+        // Remove all the instances from the list who have salary less than 10000 using Iterator interface
+        Iterator<Employee> iterator2 = employeeList.iterator();
+        while (iterator2.hasNext()) {
+            Employee employee = iterator2.next();
+            if (employee.getSalary() < 10000) {
+                iterator2.remove();
+            }
+        }
+        System.out.println("\nList after removing instances with salary less than 10000:");
+        for (Employee employee : employeeList) {
+            System.out.println(employee.getEmpName() + " " + employee.getSalary());
+        }
+    }
+}
+
+
+
 
 2. Using the above class, what will be the output of the below mentioned code snippet? Share 
 your findings with the help of comments. What should be done to resolve the problem if any?
@@ -37,13 +103,261 @@ empList.remove(new Employee(5,"A",45000));
 System.out.print(empList.size());
 
 
+Ans:
+
+List<Employee> empList = new ArrayList<Employee>();
+
+empList.add(new Employee(5, "A", 45000));
+empList.add(new Employee(2, "B", 30000));
+empList.add(new Employee(7, "C", 80000));
+
+boolean check = empList.contains(new Employee(5, "A", 45000));
+System.out.println(check);
+
+empList.remove(new Employee(5, "A", 45000));
+System.out.println(empList.size());
+
+
+This code creates an ArrayList of Employee objects and performs the following operations:
+
+a. Add three Employee objects in the list.
+b. Check if the list contains a specific Employee object with empId=5, empName="A", and salary=45000. This is done using the contains() method of ArrayList. The contains() method checks for object equality by comparing the contents of the objects.
+c. Print the result of the contains() method check.
+d. Remove a specific Employee object with empId=5, empName="A", and salary=45000. This is done using the remove() method of ArrayList.
+e. Print the size of the list after the removal.
+
+
+The output of the corrected code snippet will be as follows:
+true
+2
+
+
+
+The contains() method returns true because the list contains an Employee object with empId=5, empName="A",
+and salary=45000. The size of the list after the removal is 2 because one Employee object was removed from the list.
+However, note that the remove() method may not work as expected in this case because 
+the Employee object being passed to it as an argument is not the same as the one that was
+added to the list earlier, even though they have the same content. This is because remove() method 
+checks for object equality using the equals() method, and the default implementation of equals() 
+method in the Object class only checks for reference equality, not content equality. 
+To fix this, we need to override the equals() method in the Employee class to check for content equality.
+
+
+
+
+
 
 3. Sort the above list on empId using Comparable interface.
+
+
+import java.util.*;
+
+class Employee implements Comparable<Employee> {
+    int empId;
+    String empName;
+    double salary;
+    
+    public Employee(int empId, String empName, double salary) {
+        this.empId = empId;
+        this.empName = empName;
+        this.salary = salary;
+    }
+    
+    // Implement compareTo() method to compare Employee objects based on empId field
+    @Override
+    public int compareTo(Employee other) {
+        return Integer.compare(this.empId, other.empId);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        List<Employee> empList = new ArrayList<Employee>();
+        empList.add(new Employee(5, "A", 45000));
+        empList.add(new Employee(2, "B", 30000));
+        empList.add(new Employee(7, "C", 80000));
+        
+        // Sort the list using Collections.sort() method, which will use the compareTo() method of the Employee class to compare objects
+        Collections.sort(empList);
+        
+        // Print the sorted list
+        for (Employee emp : empList) {
+            System.out.println(emp.empId + " " + emp.empName + " " + emp.salary);
+        }
+    }
+}
+
+
+
+
+In the above code, we implement the Comparable interface in the Employee class and override the compareTo()
+method to compare Employee objects based on their empId field. We then create an ArrayList of Employee objects 
+and add three Employee objects to the list. Finally, we sort the list using the Collections.sort() method,
+which will use the compareTo() method to compare the Employee objects. We then print the sorted list using
+a for-each loop. The output of the code will be as follows:
+
+2 B 30000.0
+5 A 45000.0
+7 C 80000.0
+
+
+
+
 4. Sort the same list again on basis of salary using Comparator Interface. Show the 
 implementation of Comparator with the help of
 a. Anonymous Inner Class
 b. Lambda Expression
+
+
+
+
+import java.util.*;
+
+class Employee {
+    int empId;
+    String empName;
+    double salary;
+    
+    public Employee(int empId, String empName, double salary) {
+        this.empId = empId;
+        this.empName = empName;
+        this.salary = salary;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        List<Employee> empList = new ArrayList<Employee>();
+        empList.add(new Employee(5, "A", 45000));
+        empList.add(new Employee(2, "B", 30000));
+        empList.add(new Employee(7, "C", 80000));
+        
+        // Sort the list using Comparator interface with anonymous inner class implementation
+        Collections.sort(empList, new Comparator<Employee>() {
+            @Override
+            public int compare(Employee emp1, Employee emp2) {
+                return Double.compare(emp1.salary, emp2.salary);
+            }
+        });
+        
+        // Print the sorted list
+        System.out.println("Sorted by salary using anonymous inner class implementation:");
+        for (Employee emp : empList) {
+            System.out.println(emp.empId + " " + emp.empName + " " + emp.salary);
+        }
+        
+        // Sort the list using Comparator interface with lambda expression implementation
+        Collections.sort(empList, (emp1, emp2) -> Double.compare(emp1.salary, emp2.salary));
+        
+        // Print the sorted list
+        System.out.println("Sorted by salary using lambda expression implementation:");
+        for (Employee emp : empList) {
+            System.out.println(emp.empId + " " + emp.empName + " " + emp.salary);
+        }
+    }
+}
+
+
+In the above code, we first create an ArrayList of Employee objects and 
+add three Employee objects to the list. We then sort the list using the Comparator
+interface with anonymous inner class implementation, where we create a new Comparator 
+object that overrides the compare() method to compare Employee objects based on their 
+salary field. We then print the sorted list.
+
+Next, we sort the same Employee list using the Comparator interface with lambda expression
+implementation, where we use a lambda expression to create a new Comparator object that overrides
+the compare() method to compare Employee objects based on their salary field. We then print the sorted list again.
+
+The output of the code will be as follows:
+
+Sorted by salary using anonymous inner class implementation:
+2 B 30000.0
+5 A 45000.0
+7 C 80000.0
+Sorted by salary using lambda expression implementation:
+2 B 30000.0
+5 A 45000.0
+7 C 80000.0
+
+
+
+
+
 5. Change the above code to use LinkedList instead of ArrayList and perform the same operations.
+
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Iterator;
+
+class Employee {
+    int empId;
+    String empName;
+    double salary;
+    
+    public Employee(int empId, String empName, double salary) {
+        this.empId = empId;
+        this.empName = empName;
+        this.salary = salary;
+    }
+    
+    // Getter and setter methods for data members
+}
+
+public class EmployeeList {
+    public static void main(String[] args) {
+        List<Employee> empList = new LinkedList<>();
+
+        empList.add(new Employee(5, "A", 45000));
+        empList.add(new Employee(2, "B", 30000));
+        empList.add(new Employee(7, "C", 80000));
+
+        // Remove the object at a particular index
+        empList.remove(1);
+
+        // Print the list using for loop
+        System.out.println("Printing using for loop:");
+        for (int i = 0; i < empList.size(); i++) {
+            System.out.println(empList.get(i).empName);
+        }
+
+        // Print the list using for-each loop
+        System.out.println("Printing using for-each loop:");
+        for (Employee e : empList) {
+            System.out.println(e.empName);
+        }
+
+        // Print the list using Iterator interface
+        System.out.println("Printing using Iterator interface:");
+        Iterator<Employee> itr = empList.iterator();
+        while (itr.hasNext()) {
+            System.out.println(itr.next().empName);
+        }
+
+        // Print backward using ListIterator interface
+        System.out.println("Printing backward using ListIterator interface:");
+        ListIterator<Employee> listItr = empList.listIterator(empList.size());
+        while (listItr.hasPrevious()) {
+            System.out.println(listItr.previous().empName);
+        }
+
+        // Remove all the instances from the list whose salary is less than 10000
+        System.out.println("Removing employees with salary less than 10000 using Iterator:");
+        Iterator<Employee> itr2 = empList.iterator();
+        while (itr2.hasNext()) {
+            Employee e = itr2.next();
+            if (e.salary < 10000) {
+                itr2.remove();
+            }
+        }
+    }
+}
+
+
+
+
+
 6. Create a Java program that creates a Set using a HashSet implementation. The Set stores fruit 
 names and the fruits must be added in the following sequence:
 Pear
@@ -61,6 +375,60 @@ e. Show the set is now empty.
 they were added.
 
 
+
+
+import java.util.HashSet;
+import java.util.Set;
+
+public class FruitSetDemo {
+    public static void main(String[] args) {
+        // Create a HashSet to store fruit names
+        Set<String> fruitSet = new HashSet<String>();
+
+        // Add fruits to the set in the specified sequence
+        fruitSet.add("Pear");
+        fruitSet.add("Banana");
+        fruitSet.add("Tangerine");
+        fruitSet.add("Strawberry");
+        fruitSet.add("Blackberry");
+
+        // Display the contents of the set
+        System.out.println("Contents of set: " + fruitSet);
+
+        // Display the number of elements in the set
+        System.out.println("Number of elements in set: " + fruitSet.size());
+
+        // Remove blackberry and strawberry from the set
+        fruitSet.remove("Blackberry");
+        fruitSet.remove("Strawberry");
+
+        // Display the contents of the set again
+        System.out.println("Contents of set after removing blackberry and strawberry: " + fruitSet);
+
+        // Remove all remaining fruits from the set using clear() method
+        fruitSet.clear();
+
+        // Show that the set is now empty
+        System.out.println("Contents of set after clearing: " + fruitSet);
+
+        /*
+        The fruits don't get listed in the order in which they were added because a HashSet
+        uses a hashing function to determine the index where each element should be stored.
+        This allows for fast access and search of elements, but does not preserve the original
+        insertion order.
+        */
+    }
+}
+
+
+Contents of set: [Pear, Tangerine, Strawberry, Banana, Blackberry]
+Number of elements in set: 5
+Contents of set after removing blackberry and strawberry: [Pear, Tangerine, Banana]
+Contents of set after clearing: []
+
+
+
+
 7. Create a HashSet of the class Employee created in Question-1.
 HashSet<Employee>employeeSet=new HashSet<Employee();
 empList.add(new Employee(1,"A",45000));
@@ -71,9 +439,24 @@ empList.add(new Employee(1,"A",45000));
 
 System.out.println(employeeSet.size());
 
-
 Check the result and document your findings in a form of comments.
 Print the HashSet with the help of Iterator Interface. Explain why HashSet can’t be index-based. 
 Create a readMe.txt file to document your answer.
+
+
+
+
+Iterator<Employee> iterator = employeeSet.iterator();
+while (iterator.hasNext()) {
+    Employee emp = iterator.next();
+    System.out.println(emp.empId + " " + emp.empName + " " + emp.salary);
+}
+
+
+A HashSet cannot be index-based because it does not maintain the order of elements
+in which they were added to the set. The elements are stored based on their hash code
+values, which determines the bucket in which they are placed. 
+This makes HashSet a faster data structure for searching, insertion and deletion of 
+elements, but it does not preserve the order of elements.
 
 
