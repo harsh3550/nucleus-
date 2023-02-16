@@ -6,6 +6,33 @@ Stringconcat(String s1, String s2);
 
 Implement this Interface as Lambda and use it to concatenate two strings.
 
+
+
+
+
+interface ConcatString {
+    String concat(String s1, String s2);
+}
+
+public class Main {
+    public static void main(String[] args) {
+        ConcatString concatString = (s1, s2) -> s1 + s2;
+        String result = concatString.concat("Hello", "World");
+        System.out.println(result); // Output: HelloWorld
+    }
+}
+
+
+In this implementation, we define the ConcatString interface with the 
+concat() method, which takes two String parameters and returns a concatenated string.
+We then create a lambda expression to implement this interface by using the -> syntax. 
+In the lambda expression, we simply concatenate
+the two input strings and return the result. Finally, 
+we use the lambda expression to concatenate the strings "Hello" and "World" and print the result.
+
+
+
+
 2. Use Predicate Interface to perform the following:
 a Check whether a number is divisible by 5.
 b Check whether a number is divisible by 2.
@@ -14,9 +41,40 @@ d Check whether a number is divisible by 2 or 5.
 
 
 
+import java.util.function.Predicate;
+
+public class PredicateExample {
+    public static void main(String[] args) {
+        // Check whether a number is divisible by 5
+        Predicate<Integer> divisibleBy5 = num -> num % 5 == 0;
+        System.out.println("Is 15 divisible by 5? " + divisibleBy5.test(15)); // true
+        System.out.println("Is 7 divisible by 5? " + divisibleBy5.test(7)); // false
+
+        // Check whether a number is divisible by 2
+        Predicate<Integer> divisibleBy2 = num -> num % 2 == 0;
+        System.out.println("Is 10 divisible by 2? " + divisibleBy2.test(10)); // true
+        System.out.println("Is 7 divisible by 2? " + divisibleBy2.test(7)); // false
+
+        // Check whether a number is divisible by both 2 and 5
+        Predicate<Integer> divisibleBy2And5 = divisibleBy2.and(divisibleBy5);
+        System.out.println("Is 20 divisible by both 2 and 5? " + divisibleBy2And5.test(20)); // true
+        System.out.println("Is 15 divisible by both 2 and 5? " + divisibleBy2And5.test(15)); // false
+
+        // Check whether a number is divisible by 2 or 5
+        Predicate<Integer> divisibleBy2Or5 = divisibleBy2.or(divisibleBy5);
+        System.out.println("Is 10 divisible by 2 or 5? " + divisibleBy2Or5.test(10)); // true
+        System.out.println("Is 7 divisible by 2 or 5? " + divisibleBy2Or5.test(7)); // false
+    }
+}
+
+
+
+
 3. Create an array of Customer objects for the class created in Day 2 assignment and print all 
 those customers whose monthly income is greater than 5lac per annum. Create your own 
 Functional Interface and implement it. 
+
+
 
 
 
