@@ -277,10 +277,12 @@ index position.
 
 
 public interface MyIterator {
-  boolean hasNext();
-  Object next();
-  void remove();
+    boolean hasNext(); // returns true/false based on whether there is next element in the array or not
+    Object next(); // returns the next object from the array
+    void remove(); // deletes the object at the current array position and places Null at that index position
 }
+
+
 
 
 
