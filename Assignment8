@@ -263,6 +263,9 @@ public class MainClass {
 
 
 3. Create an interface ‘MyIterator’ as mentioned below: 
+ hasNext() :boolean
+ next():Object
+ remove():void
  
 The functionalities of the methods are as mentioned below: 
 a. hasNext() : returns true/false based on whether there is next element in the 
