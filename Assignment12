@@ -453,6 +453,12 @@ while (iterator.hasNext()) {
 }
 
 
+1 A 45000.0
+2 P 75000.0
+5 D 55000.0
+7 B 35000.0
+
+
 A HashSet cannot be index-based because it does not maintain the order of elements
 in which they were added to the set. The elements are stored based on their hash code
 values, which determines the bucket in which they are placed. 
