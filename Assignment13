@@ -1,0 +1,49 @@
+1. Change the program created in Question – 1 & 2 of Collection Day-1 assignment to use 
+HashSet instead of List. Record your findings and resolve issue if any.
+
+
+
+
+
+
+
+
+2. Change the same program to use TreeSet. Sort the TreeSet on basis of 
+a. Employee id using Comparable Interface.
+b. Employee Name using Comparator Interface.y
+
+
+
+
+
+3. In the above TreeSet, write a Java program to create a reverse order view of the elements.
+
+
+
+
+
+4. Make a hash table (Map) that maps numbers (e.g., 2) to words (e.g, “two” or “dos”). Test it 
+out by passing it a few numbers and printing out the corresponding words. Note: hash table 
+keys in Java cannot be primitives; they must be objects.
+
+
+
+
+
+5. Recreate the assignment-1 of Day-5 to use an HashSet of Customers instead of Array in the 
+Bank class. Repeat the functionalities. 
+
+
+
+
+
+6. Create a Java program based on the given class diagram. Customer can take multiple loans. 
+Identify which of the collection class is best suited for this scenario and implement the same.
+Perform the below given operations on the collection: 
+a. Sort the set of Loans taken by a particular customer on the basis of loanAmount in 
+descending order 
+b. The List has to be sorted again on the basis of loanDisbursalDate
+c. Find out from the list of Loans which all Loans are still pending to be approved 
+d. Find out from the list of loans whose emiDueDate is less than the current date and 
+calculate the late penalty for the same and display it.
+e. Remove all the loans whose status has been changed to ‘Closed’
