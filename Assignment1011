@@ -1,7 +1,72 @@
 1. What are the three different ways of creating Singleton Objects? Show a demo of all three.
 
+In Java, there are three different ways to create Singleton objects:
+
+Eager initialization
+Lazy initialization
+Thread-safe initialization
+Here's a demo of each approach:
+
+Eager Initialization
+Eager initialization creates the singleton instance at the time of class loading.
+
+public class EagerSingleton {
+    private static final EagerSingleton instance = new EagerSingleton();
+
+    private EagerSingleton() {}
+
+    public static EagerSingleton getInstance() {
+        return instance;
+    }
+}
 
 
+
+Lazy Initialization
+Lazy initialization creates the singleton instance only when it is required.
+
+
+
+public class LazySingleton {
+    private static LazySingleton instance;
+
+    private LazySingleton() {}
+
+    public static LazySingleton getInstance() {
+        if (instance == null) {
+            instance = new LazySingleton();
+        }
+        return instance;
+    }
+}
+
+
+
+
+Thread-Safe Initialization
+Thread-safe initialization creates the singleton instance in a thread-safe manner to avoid any race conditions or concurrency issues.
+
+public class ThreadSafeSingleton {
+    private static ThreadSafeSingleton instance;
+
+    private ThreadSafeSingleton() {}
+
+    public static synchronized ThreadSafeSingleton getInstance() {
+        if (instance == null) {
+            instance = new ThreadSafeSingleton();
+        }
+        return instance;
+    }
+}
+
+
+
+Note: These implementations are not perfect and have their own limitations. For example,
+the Eager Initialization approach creates the instance even if it is not required, which may 
+cause performance issues in large applications. Similarly, the Lazy Initialization approach is
+not thread-safe and may result in multiple instances 
+being created in a multi-threaded environment. Therefore,
+it is important to choose the right approach based on the requirements of your application.
 
 
 
@@ -11,12 +76,144 @@
 same citing the references in a pdf file.
 
 
+SOLID is an acronym for five design principles that can be used to make software systems more maintainable and scalable. These principles are:
+
+Single Responsibility Principle (SRP)
+Open-Closed Principle (OCP)
+Liskov Substitution Principle (LSP)
+Interface Segregation Principle (ISP)
+Dependency Inversion Principle (DIP)
+Here are some examples of how these principles are applied in the Java API:
+
+Single Responsibility Principle (SRP)
+The Single Responsibility Principle states that a class should have only one reason to change. In the Java API, this principle is used extensively to create classes that have a single purpose or responsibility. For example, the java.io package contains classes such as FileReader and FileWriter that are responsible for reading and writing files, respectively. Similarly, the java.util package contains classes such as ArrayList and LinkedList that are responsible for managing lists of objects.
+
+Open-Closed Principle (OCP)
+The Open-Closed Principle states that classes should be open for extension but closed for modification. This principle is used in the Java API to create classes that can be extended without modifying the existing code. For example, the java.util package contains the Comparator interface, which can be implemented to provide custom sorting logic for objects in a collection.
+
+Liskov Substitution Principle (LSP)
+The Liskov Substitution Principle states that objects of a superclass should be replaceable with objects of a subclass without affecting the correctness of the program. This principle is used in the Java API to create classes that can be used interchangeably. For example, the java.util.List interface is implemented by the ArrayList and LinkedList classes, which can be used interchangeably in most cases.
+
+Interface Segregation Principle (ISP)
+The Interface Segregation Principle states that clients should not be forced to depend on methods they do not use. This principle is used in the Java API to create interfaces that have a single responsibility or purpose. For example, the java.util.function package contains functional interfaces such as Predicate, Function, and Consumer that have a single method and can be used in lambda expressions.
+
+Dependency Inversion Principle (DIP)
+The Dependency Inversion Principle states that high-level modules should not depend on low-level modules, but both should depend on abstractions. This principle is used in the Java API to create classes that depend on abstractions rather than concrete implementations. For example, the java.util.logging package contains classes such as Logger and Handler that depend on abstractions such as Level and Formatter.
+
+Overall, the SOLID principles are widely used in the Java API to create classes and interfaces that are maintainable, scalable, and easy to use. By following these principles, developers can create code that is more flexible and adaptable to changes in the future.
+
+
+
+
+
+
 
 
 
 
 3. Re-create the addLoanProduct() method of Bank Class created in Question-2 of Day-6 
 assignment with the help of Builder Pattern.
+
+
+Sure, here's how you can re-create the addLoanProduct() method of the Bank class using the Builder pattern:
+
+First, let's define a LoanProduct class that represents a loan product offered by the bank:
+
+java
+Copy code
+public class LoanProduct {
+    private String name;
+    private double interestRate;
+    private int maximumAmount;
+    private int maximumDuration;
+
+    public LoanProduct(String name, double interestRate, int maximumAmount, int maximumDuration) {
+        this.name = name;
+        this.interestRate = interestRate;
+        this.maximumAmount = maximumAmount;
+        this.maximumDuration = maximumDuration;
+    }
+
+    // Getters and setters
+}
+Next, let's define a LoanProductBuilder class that allows us to build LoanProduct objects using a fluent interface:
+
+java
+Copy code
+public class LoanProductBuilder {
+    private String name;
+    private double interestRate;
+    private int maximumAmount;
+    private int maximumDuration;
+
+    public LoanProductBuilder withName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public LoanProductBuilder withInterestRate(double interestRate) {
+        this.interestRate = interestRate;
+        return this;
+    }
+
+    public LoanProductBuilder withMaximumAmount(int maximumAmount) {
+        this.maximumAmount = maximumAmount;
+        return this;
+    }
+
+    public LoanProductBuilder withMaximumDuration(int maximumDuration) {
+        this.maximumDuration = maximumDuration;
+        return this;
+    }
+
+    public LoanProduct build() {
+        return new LoanProduct(name, interestRate, maximumAmount, maximumDuration);
+    }
+}
+Finally, we can modify the Bank class to use the LoanProductBuilder to create new loan products:
+
+java
+Copy code
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Bank {
+    private String name;
+    private List<LoanProduct> loanProducts;
+
+    public Bank(String name) {
+        this.name = name;
+        this.loanProducts = new ArrayList<>();
+    }
+
+    public void addLoanProduct(String name, double interestRate, int maximumAmount, int maximumDuration) {
+        LoanProduct loanProduct = new LoanProductBuilder()
+                .withName(name)
+                .withInterestRate(interestRate)
+                .withMaximumAmount(maximumAmount)
+                .withMaximumDuration(maximumDuration)
+                .build();
+        loanProducts.add(loanProduct);
+    }
+
+    // Other methods
+}
+Now, we can create new loan products using the addLoanProduct() method like this:
+
+java
+Copy code
+
+Bank bank = new Bank("MyBank");
+bank.addLoanProduct("Home Loan", 5.5, 5000000, 20);
+bank.addLoanProduct("Car Loan", 7.5, 1000000, 5);
+This approach allows us to create new loan products in a more concise and 
+readable way, and it also makes it easier to add new properties to the LoanProduct 
+class in the future without modifying the LoanProductBuilder or the Bank class.
+
+
+
+
 
 
 
@@ -29,6 +226,79 @@ the bank must be accessed using the command mentioned below
 Maker maker = Bank.Factory.getMakerInstance();
  or 
  Operator operator = Bank.Factory.getOperatorInsatance();
+ 
+ 
+ 
+ Sure, here's how you can implement the Factory design pattern to create the object of the Bank class using the Maker and Operator interfaces:
+
+First, let's define the Maker and Operator interfaces:
+
+java
+Copy code
+public interface Maker {
+    Bank createBank(String name);
+}
+
+public interface Operator {
+    void operateBank(Bank bank);
+}
+Next, let's modify the Bank class to include a Factory inner class that creates instances of the Bank class using the Maker interface:
+
+java
+Copy code
+public class Bank {
+    private String name;
+    private List<LoanProduct> loanProducts;
+
+    private Bank(String name) {
+        this.name = name;
+        this.loanProducts = new ArrayList<>();
+    }
+
+    public static class Factory {
+        public static Maker getMakerInstance() {
+            return Bank::new;
+        }
+
+        public static Operator getOperatorInstance() {
+            return bank -> {
+                System.out.println("Operating bank: " + bank.getName());
+                // Perform operations on bank
+            };
+        }
+    }
+
+    // Getters and setters
+
+    public String getName() {
+        return name;
+    }
+
+    public List<LoanProduct> getLoanProducts() {
+        return loanProducts;
+    }
+}
+Here, the getMakerInstance() method returns a lambda expression that creates a new instance of the Bank class,
+and the getOperatorInstance() method returns a lambda expression that operates on a Bank object.
+
+Now, we can use the Factory class to create instances of the Maker and Operator interfaces, and use them to create and operate on Bank objects:
+
+java
+Copy code
+Maker maker = Bank.Factory.getMakerInstance();
+Operator operator = Bank.Factory.getOperatorInstance();
+
+Bank bank1 = maker.createBank("MyBank");
+operator.operateBank(bank1);
+
+Bank bank2 = maker.createBank("YourBank");
+operator.operateBank(bank2);
+This approach allows us to decouple the creation and operation of Bank objects
+from the rest of the code, and also makes it easy to switch between different implementations of the Bank class.
+
+
+
+
  
  
  
@@ -57,3 +327,32 @@ which inturn will use the NumberSorter class provided to us as mentioned below:
 
 
 7. Findout which part of Java API is based on Adapter pattern. Document your findings
+
+
+
+
+The Adapter pattern is a structural design pattern that allows objects with incompatible interfaces to collaborate.
+It is used to adapt the interface of an existing class to a new interface that the client code expects to use.
+
+In the Java API, there are several examples of the Adapter pattern being used. Here are a few examples:
+
+java.util.Arrays#asList()
+The Arrays.asList() method returns a fixed-size list backed by the specified array. It adapts the
+array's interface to the List interface, allowing the client code to use the array as if it were a List. 
+The returned List object is an adapter that allows the client code to manipulate the array as if it were a List.
+
+java.io.InputStreamReader
+The InputStreamReader class is an adapter that adapts an InputStream object to a Reader object. 
+It reads bytes from the InputStream object and converts them into characters using a specified character set.
+The client code can then use the Reader object to read characters from the input stream.
+
+javax.swing.JTable#print()
+The JTable.print() method is an example of the Adapter pattern being used in the Java Swing API. 
+It adapts the JTable component's interface to the Printable interface, allowing the client code to
+print the table using the standard Java printing APIs.
+
+In each of these examples, the Adapter pattern is used to adapt an existing interface to a new
+interface that the client code expects to use. This allows the client code to use the adapted object
+without having to modify its own code to work with the original interface.
+
+
