@@ -27,6 +27,31 @@ out by passing it a few numbers and printing out the corresponding words. Note: 
 keys in Java cannot be primitives; they must be objects.
 
 
+import java.util.HashMap;
+
+public class NumberWordMap {
+    private HashMap<Integer, String> map;
+
+    public NumberWordMap() {
+        map = new HashMap<Integer, String>();
+        map.put(0, "zero");
+        map.put(1, "one");
+        map.put(2, "two");
+        map.put(3, "three");
+        map.put(4, "four");
+        map.put(5, "five");
+        map.put(6, "six");
+        map.put(7, "seven");
+        map.put(8, "eight");
+        map.put(9, "nine");
+    }
+
+    public String getWord(int num) {
+        return map.get(num);
+    }
+}
+
+
 
 
 
