@@ -51,6 +51,15 @@ public class NumberWordMap {
     }
 }
 
+NumberWordMap map = new NumberWordMap();
+System.out.println(map.getWord(2));  // should print "two"
+System.out.println(map.getWord(9));  // should print "nine"
+
+
+Output:
+two
+nine
+
 
 
 
