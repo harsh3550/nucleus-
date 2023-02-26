@@ -1,0 +1,155 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class CustomerMasterUploader {
+
+    // Define regular expressions for data validation
+    private static final String ALPHA_NUMERIC_PATTERN = "^[a-zA-Z0-9]+$";
+    private static final String EMAIL_PATTERN = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+    private static final String DATE_PATTERN = "yyyy-MM-dd";
+    private static final String RECORD_STATUS_PATTERN = "^[NMADR]$";
+    private static final String ACTIVE_FLAG_PATTERN = "^[AI]$";
+
+    public static void main(String[] args) {
+        String fileName = "customers.txt";
+        String fileLocation = "/path/to/file";
+        String rejectionLevel = "R"; // or "F" for file level rejection
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        BufferedReader reader = null;
+        int lineNumber = 0;
+        int successfulRecords = 0;
+        int rejectedRecords = 0;
+
+        try {
+            // Load the JDBC driver and establish a connection to the database
+            Class.forName("com.mysql.jdbc.Driver");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydatabase", "username", "password");
+
+            // Prepare the SQL statement for inserting records into the Customer Master table
+            String sql = "INSERT INTO customer_master (customer_id, customer_code, customer_name, customer_address_1, "
+                    + "customer_address_2, customer_pin_code, email_address, contact_number, primary_contact_person, "
+                    + "record_status, active_flag, create_date, created_by, modified_date, modified_by, authorized_date, "
+                    + "authorized_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            stmt = conn.prepareStatement(sql);
+
+            // Open the file for reading
+            reader = new BufferedReader(new FileReader(fileLocation + "/" + fileName));
+
+            // Read each line (record) from the file
+            String line;
+            while ((line = reader.readLine()) != null) {
+                lineNumber++;
+
+                // Split the line into fields
+                String[] fields = line.split("~");
+
+                // Validate the field values
+                boolean isValid = true;
+                if (fields.length != 9) {
+                    System.out.println("Error at line " + lineNumber + ": Invalid number of fields");
+                    isValid = false;
+                } else {
+                    isValid &= validateNumericField(fields[0], 10, true, false, false);
+                    isValid &= validateAlphaNumericField(fields[1], 10, true, false, true);
+                    isValid &= validateAlphaNumericField(fields[2], 30, true, true, true);
+                    isValid &= validateAlphaNumericField(fields[3], 100, true, true, true);
+                    isValid &= validateAlphaNumericField(fields[4], 100, false, true, true);
+                    isValid &= validateNumericField(fields[5], 6, true, true, false);
+                    isValid &= validateAlphaNumericField(fields[6], 100, true, true, false);
+                    isValid &= validateNumericField(fields[7], 20, false, true, false);
+                    isValid &= validateAlphaNumericField(fields[8], 100, true, true, true);
+                    isValid &= validateRecordStatus(fields[9]);
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+         M-2:           
+                    
+                    import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class CustomerMasterUploader {
+
+    // Define regular expressions for data validation
+    private static final String ALPHA_NUMERIC_PATTERN = "^[a-zA-Z0-9]+$";
+    private static final String EMAIL_PATTERN = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+    private static final String DATE_PATTERN = "yyyy-MM-dd";
+    private static final String RECORD_STATUS_PATTERN = "^[NMADR]$";
+    private static final String ACTIVE_FLAG_PATTERN = "^[AI]$";
+
+    public static void main(String[] args) {
+        String fileName = "customers.txt";
+        String fileLocation = "/path/to/file";
+        String rejectionLevel = "R"; // or "F" for file level rejection
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        BufferedReader reader = null;
+        int lineNumber = 0;
+        int successfulRecords = 0;
+        int rejectedRecords = 0;
+
+        try {
+            // Load the JDBC driver and establish a connection to the database
+            Class.forName("com.mysql.jdbc.Driver");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydatabase", "username", "password");
+
+            // Prepare the SQL statement for inserting records into the Customer Master table
+            String sql = "INSERT INTO customer_master (customer_id, customer_code, customer_name, customer_address_1, "
+                    + "customer_address_2, customer_pin_code, email_address, contact_number, primary_contact_person, "
+                    + "record_status, active_flag, create_date, created_by, modified_date, modified_by, authorized_date, "
+                    + "authorized_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            stmt = conn.prepareStatement(sql);
+
+            // Open the file for reading
+            reader = new BufferedReader(new FileReader(fileLocation + "/" + fileName));
+
+            // Read each line (record) from the file
+            String line;
+            while ((line = reader.readLine()) != null) {
+                lineNumber++;
+
+                // Split the line into fields
+                String[] fields = line.split("~");
+
+                // Validate the field values
+                boolean isValid = true;
+                if (fields.length != 10) {
+                    System.out.println("Error at line " + lineNumber + ": Invalid number of fields");
+                    isValid = false;
+                } else {
+                    isValid &= validateNumericField(fields[0],
+
