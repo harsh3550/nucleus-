@@ -1,0 +1,75 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+public class Designation {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Read the Sagar file
+        File sagarFile = new File("sagar.txt");
+        String sagarData = readFile(sagarFile);
+
+        // Read the Harsh file
+        File harshFile = new File("harsh.txt");
+        String harshData = readFile(harshFile);
+
+        // Prompt the user to select a file
+        System.out.print("Enter the file name (sagar/harsh): ");
+        String fileName = scanner.nextLine().toLowerCase();
+
+        // Select the appropriate file
+        String fileData;
+        if (fileName.equals("sagar")) {
+            fileData = sagarData;
+        } else if (fileName.equals("harsh")) {
+            fileData = harshData;
+        } else {
+            System.out.println("Invalid file name.");
+            return;
+        }
+
+        // Prompt the user to enter a name
+        System.out.print("Enter a name: ");
+        String name = scanner.nextLine();
+
+        // Find the name in the file data
+        String[] lines = fileData.split("\n");
+        boolean found = false;
+        for (String line : lines) {
+            String[] parts = line.split(",");
+            if (parts[0].equals(name)) {
+                int experience = Integer.parseInt(parts[2]);
+                String designation;
+                if (experience < 1) {
+                    designation = "ase";
+                } else if (experience <= 3) {
+                    designation = "se";
+                } else {
+                    designation = "TL";
+                }
+                System.out.println("Designation: " + designation);
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            System.out.println("Name not found.");
+        }
+    }
+
+    public static String readFile(File file) {
+        try {
+            Scanner scanner = new Scanner(file);
+            StringBuilder builder = new StringBuilder();
+            while (scanner.hasNextLine()) {
+                builder.append(scanner.nextLine() + "\n");
+            }
+            scanner.close();
+            return builder.toString();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+}
