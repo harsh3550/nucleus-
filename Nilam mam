@@ -73,3 +73,80 @@ public class Designation {
         }
     }
 }
+
+
+
+
+
+
+
+import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
+
+public class EmployeePost {
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        
+        // ask for file name
+        System.out.print("Enter file name: ");
+        String fileName = input.nextLine();
+        
+        // ask for employee name
+        System.out.print("Enter employee name: ");
+        String employeeName = input.nextLine();
+        
+        // iterate through each file
+        for (String file : new String[]{"sagar.txt", "harsh.txt"}) {
+            try {
+                // open the file for reading
+                File inputFile = new File(file);
+                Scanner fileReader = new Scanner(inputFile);
+                
+                // iterate through each line in the file
+                while (fileReader.hasNextLine()) {
+                    String line = fileReader.nextLine();
+                    
+                    // split the line into fields
+                    String[] fields = line.split(" ");
+                    
+                    // check if the name matches the input
+                    if (fields[0].equals(employeeName)) {
+                        int experience = Integer.parseInt(fields[4]);
+                        String post = determinePost(experience);
+                        
+                        // print the employee's name and post
+                        System.out.println("Employee Name: " + employeeName);
+                        System.out.println("Post: " + post);
+                        
+                        // exit the loop
+                        break;
+                    }
+                }
+                
+                // close the file
+                fileReader.close();
+            } catch (FileNotFoundException e) {
+                System.out.println("File not found.");
+            }
+        }
+    }
+    
+    // determine the post based on experience
+    public static String determinePost(int experience) {
+        if (experience < 1) {
+            return "Ase";
+        } else if (experience >= 1 && experience <= 3) {
+            return "Se";
+        } else {
+            return "TL";
+        }
+    }
+}
+
+
+
+
+Sagar 1234567890 sagar@email.com Pune 2
+Harsh 0987654321 harsh@email.com Mumbai 4
+
