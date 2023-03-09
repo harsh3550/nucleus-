@@ -44,3 +44,41 @@ public class ModifyFile {
         }
     }
 }
+
+
+
+
+
+
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class CharacterCounter {
+    public static void main(String[] args) {
+        if (args.length < 2) {
+            System.out.println("Usage: java CharacterCounter <file_path> <character>");
+            return;
+        }
+        
+        String filePath = args[0];
+        char characterToCount = args[1].charAt(0);
+        int count = 0;
+        
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            int c;
+            while ((c = reader.read()) != -1) {
+                if (c == characterToCount) {
+                    count++;
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading file: " + e.getMessage());
+            return;
+        }
+        
+        System.out.println("The character '" + characterToCount + "' appears " + count + " times in the file.");
+    }
+}
+
