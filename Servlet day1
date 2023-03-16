@@ -6,19 +6,170 @@ web.xml and annotation both.
 
 
 
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.annotation.WebServlet;
+ 
+@WebServlet("/hello")
+public class HelloWorldServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+ 
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.getWriter().println("Hello World!");
+    }
+}
+
+
+
+
+
 
 2. In the same application, create a servlet to count the total number of hits.
 
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.servlet.annotation.WebServlet;
+
+@WebServlet("/hit-counter")
+public class HitCounterServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession(true);
+
+        Integer count = (Integer) session.getAttribute("hitCount");
+        if (count == null) {
+            count = 1;
+        } else {
+            count++;
+        }
+        session.setAttribute("hitCount", count);
+
+        response.getWriter().println("Total Hits: " + count);
+    }
+}
+
+
+
+
+In the above servlet, we are getting the session from the request object, and retrieving the hit count 
+from the session using the "hitCount" attribute. If the attribute is null, we are initializing it to 1, 
+otherwise, we are incrementing the count by 1.
+
+Finally, we are setting the "hitCount" attribute to the incremented count and printing the total hit count in the response.
+
+Now, we need to add a servlet-mapping or annotation for the HitCounterServlet in web.xml or as an annotation, 
+respectively, as we did for the HelloWorldServlet in the previous question.
+
+That's it! Whenever this servlet is accessed, it will count the total number of hits and display it in the response.
 
 
 3. In the same application, create a servlet to identify difference between Servlet instance 
 variable and local variable
 
 
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.annotation.WebServlet;
+
+@WebServlet("/variable-demo")
+public class VariableDemoServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+    
+    // Servlet instance variable
+    private int instanceVariable = 0;
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
+        // Local variable
+        int localVariable = 0;
+
+        instanceVariable++;
+        localVariable++;
+
+        response.getWriter().println("Instance Variable Value: " + instanceVariable);
+        response.getWriter().println("Local Variable Value: " + localVariable);
+    }
+}
+
+
 
 4. Provide the hyperlink to the servlet in HTML and pass the username in the link. On click 
 of that hyperlink Servlet will get the username passed in the link and will greet(Good 
 morning/afternoon/evening/night)the user with their name based on time of the day.
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Greeting</title>
+</head>
+<body>
+	<h1>Welcome to GreetingServlet</h1>
+	<p>Please click the link below and enter your name:</p>
+	<a href="GreetingServlet?name=John">Greet Me!</a>
+</body>
+</html>
+
+
+
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Calendar;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet("/GreetingServlet")
+public class GreetingServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+
+        String name = request.getParameter("name");
+        if (name == null || name.isEmpty()) {
+            out.println("Please enter your name.");
+            return;
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
+        String greeting = "";
+        if (hourOfDay >= 4 && hourOfDay < 12) {
+            greeting = "Good morning";
+        } else if (hourOfDay >= 12 && hourOfDay < 17) {
+            greeting = "Good afternoon";
+        } else if (hourOfDay >= 17 && hourOfDay < 20) {
+            greeting = "Good evening";
+        } else {
+            greeting = "Good night";
+        }
+
+        out.println("<h1>" + greeting + ", " + name + "!</h1>");
+    }
+}
+
 
 
 
@@ -28,10 +179,85 @@ init() and destroy() method have been called and at what time during the applica
 execution. Record your finding in terms of comments.
 
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Date;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet("/lifecycle-demo")
+public class LifecycleDemoServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+    private int initCount = 0;
+    private int destroyCount = 0;
+
+    public LifecycleDemoServlet() {
+        super();
+        System.out.println("LifecycleDemoServlet constructor called at " + new Date());
+    }
+
+    public void init() throws ServletException {
+        super.init();
+        initCount++;
+        System.out.println("init() method called " + initCount + " time(s) at " + new Date());
+    }
+
+    public void destroy() {
+        destroyCount++;
+        System.out.println("destroy() method called " + destroyCount + " time(s) at " + new Date());
+        super.destroy();
+    }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+        out.println("<html><head><title>LifecycleDemoServlet</title></head><body>");
+        out.println("<h1>LifecycleDemoServlet</h1>");
+        out.println("<p>init() method called " + initCount + " time(s) at " + new Date() + "</p>");
+        out.println("<p>destroy() method called " + destroyCount + " time(s) at " + new Date() + "</p>");
+        out.println("</body></html>");
+    }
+}
+
+
+
 
 
 
 6. Create a Servlet to print the request headers. 
+
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Enumeration;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet("/HeaderServlet")
+public class HeaderServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+
+        Enumeration<String> headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String headerName = headerNames.nextElement();
+            String headerValue = request.getHeader(headerName);
+            out.println(headerName + ": " + headerValue + "<br>");
+        }
+    }
+}
 
 
 
@@ -44,18 +270,150 @@ by the user using the GET and POST methods.
 
 
 
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Form Example</title>
+</head>
+<body>
+	<h2>Form Example</h2>
+	<form method="get" action="GetFormDataServlet">
+		<label for="name">Name:</label>
+		<input type="text" name="name" id="name"><br><br>
+
+		<label for="email">Email:</label>
+		<input type="email" name="email" id="email"><br><br>
+
+		<label for="phone">Phone:</label>
+		<input type="tel" name="phone" id="phone"><br><br>
+
+		<label for="address">Address:</label>
+		<textarea name="address" id="address"></textarea><br><br>
+
+		<label>Gender:</label>
+		<input type="radio" name="gender" id="male" value="Male">
+		<label for="male">Male</label>
+		<input type="radio" name="gender" id="female" value="Female">
+		<label for="female">Female</label><br><br>
+
+		<label for="country">Country:</label>
+		<select name="country" id="country">
+			<option value="USA">USA</option>
+			<option value="Canada">Canada</option>
+			<option value="Mexico">Mexico</option>
+		</select><br><br>
+
+		<label>Languages:</label>
+		<input type="checkbox" name="language[]" id="english" value="English">
+		<label for="english">English</label>
+		<input type="checkbox" name="language[]" id="spanish" value="Spanish">
+		<label for="spanish">Spanish</label>
+		<input type="checkbox" name="language[]" id="french" value="French">
+		<label for="french">French</label><br><br>
+
+		<label for="birthdate">Birthdate:</label>
+		<input type="date" name="birthdate" id="birthdate"><br><br>
+
+		<input type="submit" value="Submit">
+		<input type="reset" value="Reset">
+	</form>
+	
+	<br><br>
+	
+	<form method="post" action="PostFormDataServlet">
+		<label for="username">Username:</label>
+		<input type="text" name="username" id="username"><br><br>
+
+		<label for="password">Password:</label>
+		<input type="password" name="password" id="password"><br><br>
+
+		<label for="comments">Comments:</label>
+		<textarea name="comments" id="comments"></textarea><br><br>
+
+		<input type="submit" value="Submit">
+		<input type="reset" value="Reset">
+	</form>
+</body>
+</html>
+
+
+
+
 
 8. Use user-agent header to identify the browser being used by the user. If it is Chrome, 
 allow the page to be displayed printing all request headers, if not, it prints an error 
 message stating that the application is best suited for Google Chrome.
 
 
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet("/BrowserCheckServlet")
+public class BrowserCheckServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String userAgent = request.getHeader("User-Agent");
+		if (userAgent.contains("Chrome")) {
+			response.setContentType("text/html");
+			PrintWriter out = response.getWriter();
+			out.println("<html><head><title>Browser Check</title></head><body>");
+			out.println("<h1>Request Headers:</h1>");
+			out.println("<ul>");
+			for (String header : request.getHeaderNames()) {
+				out.println("<li>" + header + ": " + request.getHeader(header) + "</li>");
+			}
+			out.println("</ul>");
+			out.println("</body></html>");
+		} else {
+			response.setContentType("text/plain");
+			PrintWriter out = response.getWriter();
+			out.println("This application is best suited for Google Chrome.");
+		}
+	}
+}
 
 
 
 9. Create a servlet so that it gets auto refreshed every 5 seconds and print the updated 
 time.
 
+
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+@WebServlet("/AutoRefreshServlet")
+public class AutoRefreshServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setContentType("text/html");
+		PrintWriter out = response.getWriter();
+		out.println("<html><head><title>Auto Refresh Servlet</title>");
+		out.println("<meta http-equiv='refresh' content='5'>"); // Auto refresh every 5 seconds
+		out.println("</head><body>");
+		out.println("<h1>Updated Time: " + new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()) + "</h1>");
+		out.println("</body></html>");
+	}
+
+}
 
 
 
