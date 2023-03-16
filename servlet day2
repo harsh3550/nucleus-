@@ -1,0 +1,282 @@
+1. Create a form that accepts a name, password and pass it on to the servlet
+a. The receiving servlet should check the name and password against a hard coded 
+list of name-password pairs stored in a HashMap. 
+b. HashMap should be initialized with some dummy usernames and passwords in 
+the constructor/init method of the servlet.
+c. Servlet should return either 'Name/Password Match' or 'Name/Password Does 
+Not Match' back to client
+
+
+
+
+<html>
+<head>
+	<title>Login Form</title>
+</head>
+<body>
+	<form action="LoginServlet" method="post">
+		<label for="name">Name:</label>
+		<input type="text" id="name" name="name"><br>
+		<label for="password">Password:</label>
+		<input type="password" id="password" name="password"><br>
+		<input type="submit" value="Submit">
+	</form>
+</body>
+</html>
+
+
+
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet("/LoginServlet")
+public class LoginServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	
+	// Initialize hardcoded HashMap with dummy usernames and passwords
+	private HashMap<String, String> users = new HashMap<String, String>() {{
+		put("John", "password123");
+		put("Jane", "qwerty456");
+	}};
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String name = request.getParameter("name");
+		String password = request.getParameter("password");
+		
+		// Check if name and password match in the hardcoded HashMap
+		if (users.containsKey(name) && users.get(name).equals(password)) {
+			response.setContentType("text/plain");
+			PrintWriter out = response.getWriter();
+			out.println("Name/Password Match");
+		} else {
+			response.setContentType("text/plain");
+			PrintWriter out = response.getWriter();
+			out.println("Name/Password Does Not Match");
+		}
+	}
+
+}
+
+
+
+
+
+2) In the above Question, use forward and redirect. If the username and password is 
+correct, set a request attribute named “message” and the value for the same is 
+“'Name/Password Match”. Forward the request using RequestDispatcher forward() 
+method to another servlet and print all three values there – Username and password 
+entered by user and the ‘message’ attribute. 
+If the password is incorrect, redirect the request to an error page using 
+ServletResponse.sendRedirect()
+
+
+
+
+import java.io.IOException;
+import java.util.HashMap;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.RequestDispatcher;
+
+@WebServlet("/LoginServlet")
+public class LoginServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	
+	// Initialize hardcoded HashMap with dummy usernames and passwords
+	private HashMap<String, String> users = new HashMap<String, String>() {{
+		put("John", "password123");
+		put("Jane", "qwerty456");
+	}};
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String name = request.getParameter("name");
+		String password = request.getParameter("password");
+		
+		// Check if name and password match in the hardcoded HashMap
+		if (users.containsKey(name) && users.get(name).equals(password)) {
+			request.setAttribute("username", name);
+			request.setAttribute("password", password);
+			request.setAttribute("message", "Name/Password Match");
+			RequestDispatcher rd = request.getRequestDispatcher("SuccessServlet");
+			rd.forward(request, response);
+		} else {
+			response.sendRedirect("error.html");
+		}
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet("/SuccessServlet")
+public class SuccessServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String username = (String) request.getAttribute("username");
+		String password = (String) request.getAttribute("password");
+		String message = (String) request.getAttribute("message");
+		
+		response.setContentType("text/html");
+		response.getWriter().println("<h1>Welcome " + username + "</h1>");
+		response.getWriter().println("<p>Your password is " + password + "</p>");
+		response.getWriter().println("<p>" + message + "</p>");
+	}
+
+}
+
+
+
+
+
+
+
+3. In the above question, replace sendRedirect() method with sendError() method. 
+
+index.html
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Login Form</title>
+</head>
+<body>
+	<h1>Login Form</h1>
+	<form action="LoginServlet" method="post">
+		<label for="username">Username:</label>
+		<input type="text" id="username" name="username"><br><br>
+		<label for="password">Password:</label>
+		<input type="password" id="password" name="password"><br><br>
+		<input type="submit" value="Login">
+	</form>
+</body>
+</html>
+
+
+
+LoginServlet.java
+
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet("/LoginServlet")
+public class LoginServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	
+	private HashMap<String, String> userMap;
+	
+	public void init() throws ServletException {
+		userMap = new HashMap<String, String>();
+		userMap.put("user1", "password1");
+		userMap.put("user2", "password2");
+		userMap.put("user3", "password3");
+	}
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
+		
+		if(userMap.containsKey(username) && userMap.get(username).equals(password)) {
+			request.setAttribute("username", username);
+			request.setAttribute("password", password);
+			request.setAttribute("message", "Name/Password Match");
+			request.getRequestDispatcher("WelcomeServlet").forward(request, response);
+		} else {
+			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid username or password");
+		}
+	}
+}
+
+
+WelcomeServlet.java
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet("/WelcomeServlet")
+public class WelcomeServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setContentType("text/html");
+		PrintWriter out = response.getWriter();
+		
+		String username = (String) request.getAttribute("username");
+		String password = (String) request.getAttribute("password");
+		String message = (String) request.getAttribute("message");
+		
+		out.println("<html>");
+		out.println("<head>");
+		out.println("<title>Welcome Page</title>");
+		out.println("</head>");
+		out.println("<body>");
+		out.println("<h1>Welcome " + username + "</h1>");
+		out.println("<p>Username: " + username + "</p>");
+		out.println("<p>Password: " + password + "</p>");
+		out.println("<p>Message: " + message + "</p>");
+		out.println("</body>");
+		out.println("</html>");
+	}
+}
+
+error.html
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Error Page</title>
+</head>
+<body>
+	<h1>Error Page</h1>
+	<p>Invalid username or password</p>
+</body>
+</html>
+
+
+web.xml
+
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee 
+    http://xmlns.jcp.org/xml/ns/javaee/web-app
+
+
+4. Write a servlet that redirects requests form one host to another host, giving an 
+explanation to the client before the redirection. As we generally see during payment 
+and request will be redirected to bank website.
