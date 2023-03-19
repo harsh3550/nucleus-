@@ -1,0 +1,438 @@
+1) Create a form that accepts a name, password and pass it on to the servlet
+a. The receiving servlet should check the name and password against a hard coded 
+list of name-password pairs stored in a HashMap. 
+b. HashMap should be initialized with some dummy usernames and passwords in 
+the constructor/init method of the servlet.
+c. Servlet should return either 'Name/Password Match' or 'Name/Password Does 
+Not Match' back to client.
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class LoginServlet extends HttpServlet {
+  private HashMap<String, String> users;
+
+  public void init() {
+    // Initialize the HashMap with some dummy usernames and passwords
+    users = new HashMap<String, String>();
+    users.put("Alice", "password1");
+    users.put("Bob", "password2");
+    users.put("Charlie", "password3");
+  }
+
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+    String name = request.getParameter("name");
+    String password = request.getParameter("password");
+    String message = "Name/Password Does Not Match";
+
+    if (users.containsKey(name) && users.get(name).equals(password)) {
+      message = "Name/Password Match";
+    }
+
+    response.setContentType("text/html");
+    PrintWriter out = response.getWriter();
+    out.println("<html><head><title>Login Result</title></head><body>");
+    out.println("<h1>" + message + "</h1>");
+    out.println("</body></html>");
+  }
+}
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login Form</title>
+</head>
+<body>
+  <form method="post" action="/login">
+    <label for="name">Name:</label>
+    <input type="text" name="name" id="name"><br>
+    <label for="password">Password:</label>
+    <input type="password" name="password" id="password"><br>
+    <input type="submit" value="Login">
+  </form>
+</body>
+</html>
+
+
+
+
+2. In the above Question, use forward and redirect. If the username and password is 
+correct, set a request attribute named “message” and the value for the same is 
+“'Name/Password Match”. Forward the request using RequestDispatcher forward() 
+method to another servlet and print all three values there – Username and password 
+entered by user and the ‘message’ attribute. 
+If the password is incorrect, redirect the request to an error page using 
+ServletResponse.sendRedirect()
+
+
+
+
+import java.io.IOException;
+import java.util.HashMap;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class LoginServlet extends HttpServlet {
+  private HashMap<String, String> users;
+
+  public void init() {
+    // Initialize the HashMap with some dummy usernames and passwords
+    users = new HashMap<String, String>();
+    users.put("Alice", "password1");
+    users.put("Bob", "password2");
+    users.put("Charlie", "password3");
+  }
+
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+    String name = request.getParameter("name");
+    String password = request.getParameter("password");
+    String message = "Name/Password Does Not Match";
+
+    if (users.containsKey(name) && users.get(name).equals(password)) {
+      message = "Name/Password Match";
+      request.setAttribute("message", message);
+      request.setAttribute("name", name);
+      request.setAttribute("password", password);
+      request.getRequestDispatcher("/success").forward(request, response);
+    } else {
+      response.sendRedirect("/error.html");
+    }
+  }
+}
+
+
+
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class SuccessServlet extends HttpServlet {
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+    String name = (String) request.getAttribute("name");
+    String password = (String) request.getAttribute("password");
+    String message = (String) request.getAttribute("message");
+
+    response.setContentType("text/html");
+    PrintWriter out = response.getWriter();
+    out.println("<html><head><title>Login Result</title></head><body>");
+    out.println("<h1>" + message + "</h1>");
+    out.println("<p>Username: " + name + "</p>");
+    out.println("<p>Password: " + password + "</p>");
+    out.println("</body></html>");
+  }
+}
+
+
+
+
+3. In the above question, replace sendRedirect() method with sendError() method.
+
+
+
+import java.io.IOException;
+import java.util.HashMap;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class LoginServlet extends HttpServlet {
+  private HashMap<String, String> users;
+
+  public void init() {
+    // Initialize the HashMap with some dummy usernames and passwords
+    users = new HashMap<String, String>();
+    users.put("Alice", "password1");
+    users.put("Bob", "password2");
+    users.put("Charlie", "password3");
+  }
+
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+    String name = request.getParameter("name");
+    String password = request.getParameter("password");
+    String message = "Name/Password Does Not Match";
+
+    if (users.containsKey(name) && users.get(name).equals(password)) {
+      message = "Name/Password Match";
+      request.setAttribute("message", message);
+      request.setAttribute("name", name);
+      request.setAttribute("password", password);
+      request.getRequestDispatcher("/success").forward(request, response);
+    } else {
+      response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid username or password");
+    }
+  }
+}
+
+
+
+<error-page>
+  <error-code>401</error-code>
+  <location>/error.html</location>
+</error-page>
+
+
+
+
+4) Write a servlet that redirects requests form one host to another host, giving an 
+explanation to the client before the redirection. As we generally see during payment 
+and request will be redirected to bank website.
+
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class RedirectServlet extends HttpServlet {
+  private static final String TARGET_HOST = "https://www.example.com";
+
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+    String explanation = "You are being redirected to our secure payment provider.";
+    response.setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);
+    response.setHeader("Location", TARGET_HOST);
+    response.setHeader("Refresh", "5; URL=" + TARGET_HOST);
+    response.getWriter().println("<html><head><title>Redirecting...</title></head><body>");
+    response.getWriter().println("<p>" + explanation + "</p>");
+    response.getWriter().println("<p>If you are not automatically redirected, please click ");
+    response.getWriter().println("<a href=\"" + TARGET_HOST + "\">here</a>.</p>");
+    response.getWriter().println("</body></html>");
+  }
+}
+
+
+
+5)Create a servlet that displays the servlet config and servlet context parameters. For this 
+purpose, you can create more than one servlet.
+
+
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class ConfigContextServlet extends HttpServlet {
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+    ServletConfig config = getServletConfig();
+    ServletContext context = getServletContext();
+
+    response.setContentType("text/html");
+    PrintWriter out = response.getWriter();
+
+    out.println("<html><head><title>Servlet Config and Context Parameters</title></head>");
+    out.println("<body>");
+    out.println("<h1>Servlet Config Parameters:</h1>");
+    out.println("<ul>");
+    out.println("<li>Param1 = " + config.getInitParameter("Param1") + "</li>");
+    out.println("<li>Param2 = " + config.getInitParameter("Param2") + "</li>");
+    out.println("</ul>");
+
+    out.println("<h1>Servlet Context Parameters:</h1>");
+    out.println("<ul>");
+    out.println("<li>Param3 = " + context.getInitParameter("Param3") + "</li>");
+    out.println("<li>Param4 = " + context.getInitParameter("Param4") + "</li>");
+    out.println("</ul>");
+
+    out.println("</body></html>");
+  }
+}
+
+
+
+
+<servlet>
+  <servlet-name>ConfigContextServlet</servlet-name>
+  <servlet-class>ConfigContextServlet</servlet-class>
+  <init-param>
+    <param-name>Param1</param-name>
+    <param-value>Value1</param-value>
+  </init-param>
+  <init-param>
+    <param-name>Param2</param-name>
+    <param-value>Value2</param-value>
+  </init-param>
+</servlet>
+<servlet-mapping>
+  <servlet-name>ConfigContextServlet</servlet-name>
+  <url-pattern>/configcontext</url-pattern>
+</servlet-mapping>
+<context-param>
+  <param-name>Param3</param-name>
+  <param-value>Value3</param-value>
+</context-param>
+<context-param>
+  <param-name>Param4</param-name>
+  <param-value>Value4</param-value>
+</context-param>
+
+
+
+
+6)Map error-code ‘404’ with an underconstruction.html page. Whenever 404 error occurs, 
+instead of showing the default error page, it shows ‘underconstruction.html’ page.
+
+
+<web-app>
+  <!-- other configuration -->
+  
+  <error-page>
+    <error-code>404</error-code>
+    <location>/underconstruction.html</location>
+  </error-page>
+</web-app>
+
+
+
+9)Create a Customer Registration Form with the below mentioned fields:
+Name Data Type Screen Object
+Customer Name String Text field
+Date of Birth LocalDate Date
+Email Address String Text field
+Contact Number String Text field
+Monthly Salary Double Text field
+Gender Char Radio Button
+Hobbies String array Check box
+Location String Drop-down
+Generate customer id and password and return the same to the customer post 
+successful registration.
+
+
+
+
+
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.UUID;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet("/register")
+public class CustomerRegistrationServlet extends HttpServlet {
+
+    private static final long serialVersionUID = 1L;
+    
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // Display the customer registration form
+        request.getRequestDispatcher("registration.jsp").forward(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // Retrieve form data
+        String customerName = request.getParameter("customerName");
+        LocalDate dob = LocalDate.parse(request.getParameter("dob"));
+        String email = request.getParameter("email");
+        String contactNumber = request.getParameter("contactNumber");
+        double monthlySalary = Double.parseDouble(request.getParameter("monthlySalary"));
+        char gender = request.getParameter("gender").charAt(0);
+        String[] hobbies = request.getParameterValues("hobbies");
+        String location = request.getParameter("location");
+        
+        // Generate customer ID and password
+        String customerId = UUID.randomUUID().toString();
+        String password = generatePassword();
+        
+        // Store customer data in the database or perform other actions as needed
+        // ...
+        
+        // Send confirmation email to the customer with the customer ID and password
+        
+        // Set attributes to display on the registration confirmation page
+        request.setAttribute("customerId", customerId);
+        request.setAttribute("password", password);
+        
+        // Forward to the registration confirmation page
+        request.getRequestDispatcher("registrationConfirmation.jsp").forward(request, response);
+    }
+    
+    private String generatePassword() {
+        // Generate a random password
+        return UUID.randomUUID().toString().substring(0, 8);
+    }
+}
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Customer Registration Form</title>
+</head>
+<body>
+	<h1>Customer Registration Form</h1>
+	<form action="RegisterCustomer" method="post">
+		<label for="customerName">Name:</label>
+		<input type="text" id="customerName" name="customerName"><br><br>
+		
+		<label for="dateOfBirth">Date of Birth:</label>
+		<input type="date" id="dateOfBirth" name="dateOfBirth"><br><br>
+
+		<label for="email">Email Address:</label>
+		<input type="email" id="email" name="email"><br><br>
+
+		<label for="contactNumber">Contact Number:</label>
+		<input type="text" id="contactNumber" name="contactNumber"><br><br>
+
+		<label for="monthlySalary">Monthly Salary:</label>
+		<input type="number" id="monthlySalary" name="monthlySalary"><br><br>
+
+		<label for="gender">Gender:</label>
+		<input type="radio" id="male" name="gender" value="M">
+		<label for="male">Male</label>
+		<input type="radio" id="female" name="gender" value="F">
+		<label for="female">Female</label><br><br>
+
+		<label for="hobbies">Hobbies:</label>
+		<input type="checkbox" id="reading" name="hobbies" value="reading">
+		<label for="reading">Reading</label>
+		<input type="checkbox" id="traveling" name="hobbies" value="traveling">
+		<label for="traveling">Traveling</label>
+		<input type="checkbox" id="sports" name="hobbies" value="sports">
+		<label for="sports">Sports</label><br><br>
+
+		<label for="location">Location:</label>
+		<select id="location" name="location">
+			<option value="New York">New York</option>
+			<option value="Los Angeles">Los Angeles</option>
+			<option value="Chicago">Chicago</option>
+			<option value="Houston">Houston</option>
+		</select><br><br>
+
+		<input type="submit" value="Register">
+	</form>
+</body>
+</html>
