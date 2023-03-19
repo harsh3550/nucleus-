@@ -1,0 +1,90 @@
+// Loan.java (POJO class to represent loan object)
+public class Loan {
+    private int loanId;
+    private int customerId;
+    private double amount;
+    private String status; // active or closed
+    
+    // constructor, getters, and setters
+}
+
+// LoanDAO.java (DAO class to connect to the database and fetch loan details)
+public class LoanDAO {
+    private Connection conn;
+    
+    // constructor to establish database connection
+    public LoanDAO() {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydatabase", "username", "password");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    // method to fetch all loans for a particular customer
+    public List<Loan> getLoansByCustomerId(int customerId) {
+        List<Loan> loans = new ArrayList<>();
+        String query = "SELECT * FROM loans WHERE customer_id = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, customerId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Loan loan = new Loan();
+                loan.setLoanId(rs.getInt("loan_id"));
+                loan.setCustomerId(rs.getInt("customer_id"));
+                loan.setAmount(rs.getDouble("amount"));
+                loan.setStatus(rs.getString("status"));
+                loans.add(loan);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return loans;
+    }
+}
+
+// LoanService.java (RESTful web service to fetch loan details)
+@Path("/customers/{customerId}/loans")
+public class LoanService {
+    private LoanDAO dao = new LoanDAO();
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Loan> getAllLoans(@PathParam("customerId") int customerId) {
+        List<Loan> loans = dao.getLoansByCustomerId(customerId);
+        return loans;
+    }
+}
+
+// loanDetails.html (HTML form to display loan details in the server)
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Loan Details</title>
+</head>
+<body>
+	<h1>Loan Details</h1>
+	<table>
+		<thead>
+			<tr>
+				<th>Loan ID</th>
+				<th>Customer ID</th>
+				<th>Amount</th>
+				<th>Status</th>
+			</tr>
+		</thead>
+		<tbody>
+			<!-- Loop through loan details and display in table rows -->
+			<c:forEach var="loan" items="${loans}">
+				<tr>
+					<td>${loan.loanId}</td>
+					<td>${loan.customerId}</td>
+					<td>${loan.amount}</td>
+					<td>${loan.status}</td>
+				</tr>
+			</c:forEach>
+		</tbody>
+	</table>
+</body>
+</html>
