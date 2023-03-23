@@ -241,3 +241,88 @@ public class ExamServlet extends HttpServlet {
 
 
 
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>EMI Calculator</title>
+	<style>
+		input[type="text"] {
+			padding: 5px;
+			margin: 10px;
+			border: 1px solid #ccc;
+			border-radius: 3px;
+		}
+		button {
+			padding: 5px 10px;
+			background-color: #4CAF50;
+			color: #fff;
+			border: none;
+			border-radius: 3px;
+			cursor: pointer;
+		}
+		#result {
+			padding: 10px;
+			margin: 10px;
+			border: 1px solid #ccc;
+			border-radius: 3px;
+			font-size: 18px;
+			font-weight: bold;
+		}
+	</style>
+</head>
+<body>
+	<h1>EMI Calculator</h1>
+	<label for="loan-type">Select Loan Type:</label>
+	<select id="loan-type">
+		<option value="home">Home Loan</option>
+		<option value="car">Car Loan</option>
+		<option value="personal">Personal Loan</option>
+	</select>
+	<br><br>
+	<label for="loan-amount">Loan Amount:</label>
+	<input type="text" id="loan-amount">
+	<br>
+	<label for="interest-rate">Interest Rate:</label>
+	<input type="text" id="interest-rate">
+	<br>
+	<label for="loan-tenure">Loan Tenure (in months):</label>
+	<input type="text" id="loan-tenure">
+	<br><br>
+	<button id="calculate">Calculate EMI</button>
+	<div id="result"></div>
+	<script>
+		function calculateEMI(principal, interest, months) {
+			// Convert interest rate from percentage to decimal
+			interest = interest / 100 / 12;
+  // Calculate monthly payment
+		let x = Math.pow(1 + interest, months);
+		let monthlyPayment = (principal * x * interest) / (x - 1);
+
+		// Round to 2 decimal places
+		monthlyPayment = monthlyPayment.toFixed(2);
+
+		return monthlyPayment;
+	}
+
+	document.getElementById("calculate").addEventListener("click", function() {
+		let principal = parseFloat(document.getElementById("loan-amount").value);
+		let interest = parseFloat(document.getElementById("interest-rate").value);
+		let months = parseFloat(document.getElementById("loan-tenure").value);
+
+		let monthlyPayment = calculateEMI(principal, interest, months);
+
+		document.getElementById("result").innerHTML = "EMI: " + monthlyPayment;
+	});
+</script>
+
+
