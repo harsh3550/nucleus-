@@ -22,7 +22,86 @@ annotations to complete the application
 
 
 
+Spring Core Customer Management.
 
+
+Harsh Ranjan
+Develop a Spring Core Application to perform the following actions on the Customer object.
+a. boolean registerCustomer(Customer c)
+The condition to register a customeris that the age of the customer must be greater 
+than 21. 
+b. boolean updateCustomer(Customer c)
+c. boolean deleteCustomer(int customerId)
+d. Customer getCustomer(int customerId)throws CustomerNotFoundException
+By giving the Customer Id, the customer is searched in database. If found returns the 
+object otherwise returns CustomerNotFoundException
+e. List<Customer> getAllCustomers()
+f. List<Customer> getCustomersByName(String custName)
+
+
+Important Points:
+1. The user input will be accepted in the Presentation Layer, and all the methods mentioned 
+above are present in Service Layer. 
+2. Use the Customer table already existing in the database created during SQL-Day1. The 
+application must be properly layered with the Presentation layer, Service layer and the 
+database layer. Use JDBC to connect with Database. 
+3. Use Java Configuration and ComponentScan, Autowired, Component, Service, Repository
+annotations to complete the application
+
+
+
+
+To develop a Spring Core Application to perform the above mentioned actions on the Customer object, we need to follow the following steps:
+
+Step 1: Create a database named "customerdb" and create a table named "Customer" in it, with the following columns:
+
+id (int, primary key, auto increment)
+name (varchar)
+age (int)
+Step 2: Add the required dependencies in the pom.xml file. Here are the dependencies required for this application:
+
+spring-core
+spring-context
+spring-jdbc
+mysql-connector-java
+Step 3: Create a Customer model class with the following properties:
+
+id (int)
+name (String)
+age (int)
+Step 4: Create an interface named CustomerDAO with the following methods:
+
+boolean registerCustomer(Customer c)
+boolean updateCustomer(Customer c)
+boolean deleteCustomer(int customerId)
+Customer getCustomer(int customerId) throws CustomerNotFoundException
+List<Customer> getAllCustomers()
+List<Customer> getCustomersByName(String custName)
+Step 5: Create a class named CustomerDAOImpl that implements the CustomerDAO interface. Here, we will use JDBC to connect with the database and perform database operations.
+
+Step 6: Create a Service layer with the name CustomerService with the following methods:
+
+boolean registerCustomer(Customer c)
+boolean updateCustomer(Customer c)
+boolean deleteCustomer(int customerId)
+Customer getCustomer(int customerId) throws CustomerNotFoundException
+List<Customer> getAllCustomers()
+List<Customer> getCustomersByName(String custName)
+Step 7: Create a class named CustomerServiceImpl that implements the CustomerService interface. Here, we will use the CustomerDAO object to perform the required database operations.
+
+Step 8: Create a Presentation layer with the name CustomerController with the following methods:
+
+void registerCustomer()
+void updateCustomer()
+void deleteCustomer()
+void getCustomer()
+void getAllCustomers()
+void getCustomersByName()
+Step 9: Create a class named CustomerControllerImpl that implements the CustomerController interface. Here, we will use the CustomerService object to perform the required operations.
+
+Step 10: Use Java Configuration and ComponentScan, Autowired, Component, Service, Repository annotations to complete the application.
+
+Here is the sample code for the above-mentioned steps:
 
 
 
