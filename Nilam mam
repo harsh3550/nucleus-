@@ -112,7 +112,66 @@ Here is the sample code for the above-mentioned steps:
 
 
 
+package com.example.demo.service;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.example.demo.dao.CustomerDAO;
+import com.example.demo.exception.CustomerNotFoundException;
+import com.example.demo.model.Customer;
+
+@Service
+@Transactional
+public class CustomerServiceImpl implements CustomerService {
+
+    @Autowired
+    private CustomerDAO customerDAO;
+
+    @Override
+    public boolean registerCustomer(Customer c) {
+        if (c.getAge() > 21) {
+            customerDAO.registerCustomer(c);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean updateCustomer(Customer c) {
+        customerDAO.updateCustomer(c);
+        return true;
+    }
+
+    @Override
+    public boolean deleteCustomer(int customerId) {
+        customerDAO.deleteCustomer(customerId);
+        return true;
+    }
+
+    @Override
+    public Customer getCustomer(int customerId) throws CustomerNotFoundException {
+        Customer customer = customerDAO.getCustomer(customerId);
+        if (customer == null) {
+            throw new CustomerNotFoundException("Customer not found with id : " + customerId);
+        }
+        return customer;
+    }
+
+    @Override
+    public List<Customer> getAllCustomers() {
+        return customerDAO.getAllCustomers();
+    }
+
+    @Override
+    public List<Customer> getCustomersByName(String custName) {
+        return customerDAO.getCustomersByName(custName);
+    }
+
+}
 
 
 
