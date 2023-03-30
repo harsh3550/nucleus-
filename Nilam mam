@@ -22,32 +22,6 @@ annotations to complete the application
 
 
 
-Spring Core Customer Management.
-
-
-Harsh Ranjan
-Develop a Spring Core Application to perform the following actions on the Customer object.
-a. boolean registerCustomer(Customer c)
-The condition to register a customeris that the age of the customer must be greater 
-than 21. 
-b. boolean updateCustomer(Customer c)
-c. boolean deleteCustomer(int customerId)
-d. Customer getCustomer(int customerId)throws CustomerNotFoundException
-By giving the Customer Id, the customer is searched in database. If found returns the 
-object otherwise returns CustomerNotFoundException
-e. List<Customer> getAllCustomers()
-f. List<Customer> getCustomersByName(String custName)
-
-
-Important Points:
-1. The user input will be accepted in the Presentation Layer, and all the methods mentioned 
-above are present in Service Layer. 
-2. Use the Customer table already existing in the database created during SQL-Day1. The 
-application must be properly layered with the Presentation layer, Service layer and the 
-database layer. Use JDBC to connect with Database. 
-3. Use Java Configuration and ComponentScan, Autowired, Component, Service, Repository
-annotations to complete the application
-
 
 
 
