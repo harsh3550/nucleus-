@@ -1,199 +1,80 @@
-package springDay2;
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Component;
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import java.util.List;
-import java.util.Set;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
+import org.springframework.validation.Validator;
+
 @Component
-public class Customer {
-    private int customerId;
-    private String customerName;
-    private Double monthlyIncome;
-    private String profession;
-    private String designation;
-    private String companyName;
-    private List<String> phoneNumbers;
-
-    private Set<String> emailAddress;
-
-    private String  dateOfBirth;
-
-    Address address;
-
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
+public class UserValidator implements Validator {
+    
+    private static final Pattern USERNAME_PATTERN = Pattern.compile("^[a-zA-Z]+$");
+    private static final Pattern PASSWORD_PATTERN = Pattern.compile("^(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?])(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$");
+    
+    @Override
+    public boolean supports(Class<?> clazz) {
+        return User.class.equals(clazz);
     }
-
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
-    }
-
-    public void setMonthlyIncome(Double monthlyIncome) {
-        this.monthlyIncome = monthlyIncome;
-    }
-
-    public void setProfession(String profession) {
-        this.profession = profession;
-    }
-
-    public void setDesignation(String designation) {
-        this.designation = designation;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-
-    public void setPhoneNumbers(List<String> phoneNumbers) {
-        this.phoneNumbers = phoneNumbers;
-    }
-
-    public void setEmailAddress(Set<String> emailAddress) {
-        this.emailAddress = emailAddress;
-    }
-
-    public void setAddress(Address address) {this.address = address;}
-
-    public void setDateOfBirth(String dateOfBirth) {this.dateOfBirth = dateOfBirth;}
 
     @Override
-    public String toString() {
-        return "Customer{" +
-                "customerId=" + customerId +
-                ", customerName='" + customerName + '\'' +
-                ", monthlyIncome=" + monthlyIncome +
-                ", profession='" + profession + '\'' +
-                ", designation='" + designation + '\'' +
-                ", companyName='" + companyName + '\'' +
-                ", phoneNumbers=" + phoneNumbers +
-                ", emailAddress=" + emailAddress +
-                ", dateOfBirth='" + dateOfBirth + '\'' +
-                ", address=" + address +
-                '}';
-    }
-
-    @PostConstruct
-    public void init()
-    {
-        for (int i = 0; i < phoneNumbers.size(); i++) {
-            String phoneNumber = phoneNumbers.get(i);
-            if (!phoneNumber.startsWith("+91")) {
-                phoneNumbers.set(i,"+91" + phoneNumber);
-            }
+    public void validate(Object target, Errors errors) {
+        User user = (User) target;
+        
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "NotEmpty");
+        if (!USERNAME_PATTERN.matcher(user.getUsername()).matches()) {
+            errors.rejectValue("username", "InvalidUsername");
+        }
+        
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotEmpty");
+        if (!PASSWORD_PATTERN.matcher(user.getPassword()).matches()) {
+            errors.rejectValue("password", "InvalidPassword");
+        }
+        
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "gender", "NotEmpty");
+        
+        if (user.getHobbies() == null || user.getHobbies().size() < 2) {
+            errors.rejectValue("hobbies", "InvalidHobbies");
+        }
+        
+        if (user.getAge() != null && user.getAge() < 18) {
+            errors.rejectValue("age", "InvalidAge");
+        }
+        
+        if (user.getDateOfBirth() != null && user.getDateOfBirth().isAfter(LocalDate.now())) {
+            errors.rejectValue("dateOfBirth", "InvalidDateOfBirth");
         }
     }
-
-    @PreDestroy
-    public void destroy(){
-        phoneNumbers.clear();
-        emailAddress.clear();
-    }
-}
-
-
-package springDay2;
-
-public class Address {
-    private int addressId;
-    private String AddressLine1;
-    private String AddressLine2;
-    private String city;
-    private int Zip;
-
-
-    public void setAddressId(int addressId) {
-        this.addressId = addressId;
-    }
-
-    public void setAddressLine1(String addressLine1) {
-        AddressLine1 = addressLine1;
-    }
-
-    public void setAddressLine2(String addressLine2) {
-        AddressLine2 = addressLine2;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public void setZip(int zip) {
-        Zip = zip;
-    }
-
-    @Override
-    public String toString() {
-        return "Address{" +
-                "addressId=" + addressId +
-                ", AddressLine1='" + AddressLine1 + '\'' +
-                ", AddressLine2='" + AddressLine2 + '\'' +
-                ", city='" + city + '\'' +
-                ", Zip=" + Zip +
-                '}';
-    }
 }
 
 
 
-package springDay2;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class MainDay2 {
-    public static void main(String[] args) {
-        ApplicationContext context = new ClassPathXmlApplicationContext("springDay2Beans.xml");
-        Customer details = (Customer) context.getBean("phone1");
-        System.out.println(details);
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@Validated
+public class UserController {
+    
+    @Autowired
+    private UserValidator userValidator;
+
+    @PostMapping("/register")
+    public String registerUser(@Valid @RequestBody User user, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return bindingResult.getAllErrors().toString();
+        }
+        // code to save the user
+        return "User registered successfully!";
     }
 }
-
-
-
-<?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
- http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
-
-    <bean class="org.springframework.context.annotation.CommonAnnotationBeanPostProcessor"/>
-    <bean id = "phone1" class="springDay2.Customer" >
-
-        <property name="customerId" value="101"/>
-        <property name="customerName" value="Harsh ranjan"/>
-        <property name="monthlyIncome" value="3200000.01"/>
-        <property name="profession" value="Software Engineer"/>
-        <property name="designation" value="ASE"/>
-        <property name="companyName" value="Nucleus Software"/>
-
-        <property name="phoneNumbers">
-            <list>
-                <value>+917274088610 </value>
-                <value>9334301234</value>
-                <value>7892345081</value>
-                <value>+918032456797</value>
-            </list>
-        </property>
-        <property name="emailAddress">
-            <set>
-                <value> harsh34@gmail.com</value>
-                <value> sunny23@gmail.com</value>
-                <value> raush12@gmail.com</value>
-            </set>
-        </property>
-        <property name="dateOfBirth" value="25-07-2001"/>
-        <property name="address" ref="address1"/>
-
-    </bean>
-    <bean id="address1" class="springDay2.Address">
-        <property name="addressId" value="1"/>
-        <property name="AddressLine1" value="Pindaruch"/>
-        <property name="AddressLine2" value="Muhammadpur"/>
-        <property name="city" value="Darbhnaga"/>
-        <property name="Zip" value="847306"/>
-    </bean>
-</beans>
-
-
-do the same code using java configuration .
