@@ -487,6 +487,8 @@ public class ExamServlet extends HttpServlet {
 
 		document.getElementById("result").innerHTML = "EMI: " + monthlyPayment;
 	});
-</script>
+</script
 
 
+
+Ma'am, the leave requisition management system is currently under maintenance. So, I am taking leave now and will update it later when the site is functioning properly
