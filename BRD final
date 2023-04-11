@@ -493,3 +493,73 @@ Repository to handle database operations
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 }
+
+
+
+
+</select><br><br>
+<input type="submit" value="Submit">
+<input type="reset" value="Reset">
+</form>
+</body>
+</html>
+
+This JSP form page captures the customer data using various form fields such as text input, text area, number input, and select drop-down. The form has the "action" attribute set to "/saveCustomer" which indicates that the form data will be submitted to a servlet or controller mapped to "/saveCustomer" URL for further processing.
+
+Next, you can create a Spring MVC controller to handle the form submission and save the data to the database using Hibernate.
+
+
+
+@Controller
+public class CustomerController {
+    
+    @Autowired
+    private CustomerService customerService;
+    
+    @PostMapping("/saveCustomer")
+    public String saveCustomer(@ModelAttribute("customer") Customer customer, Model model) {
+        // Call the service layer to save the customer data
+        customerService.saveCustomer(customer);
+        model.addAttribute("message", "Customer saved successfully!");
+        return "customerForm"; // Return the view name for the customer form
+    }
+    
+    // Other controller methods
+    // ...
+}
+
+
+
+
+In the above code, we use the @Controller annotation to mark the class as a Spring MVC controller. The saveCustomer method is mapped to the "/saveCustomer" URL and is annotated with @PostMapping to handle POST requests from the customer form submission. The @ModelAttribute annotation is used to bind the form data to the Customer object. The customerService is injected using @Autowired to call the service layer for saving the customer data.
+
+Finally, you can create a service layer using Spring's @Service annotation to handle the business logic and use Hibernate to save the customer data to the database.
+
+
+
+@Service
+public class CustomerService {
+    
+    @Autowired
+    private CustomerRepository customerRepository;
+    
+    @Transactional
+    public void saveCustomer(Customer customer) {
+        // Set default values for createDate and createdBy
+        customer.setCreateDate(new Date());
+        customer.setCreatedBy("logged_in_user_id");
+        // Call the repository to save the customer data
+        customerRepository.save(customer);
+    }
+    
+    // Other service methods
+    // ...
+}
+
+
+
+
+
+In the above code, we use the @Service annotation to mark the class as a Spring service. The saveCustomer method is annotated with @Transactional to enable transaction management. Inside the method, you can set default values for fields such as createDate and createdBy before calling the customerRepository.save() method to save the customer data to the database.
+
+Note: You will need to configure Hibernate and the database connection in your Spring application context or configuration files. This includes setting up the data source, session factory, and transaction manager. Additionally, you will need to define a CustomerRepository interface that extends JpaRepository or any other appropriate Spring Data repository interface for CRUD operations on the Customer entity.
