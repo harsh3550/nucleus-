@@ -1,0 +1,268 @@
+RegistrationForm.jsp
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Registration Form</title>
+</head>
+<body>
+    <h1>Registration Form</h1>
+    <form method="post" action="register.jsp">
+        <table>
+            <tr>
+                <td>Customer Code:</td>
+                <td><input type="text" name="customerCode" size="10" maxlength="10" required></td>
+            </tr>
+            <tr>
+                <td>Customer Name:</td>
+                <td><input type="text" name="customerName" size="30" maxlength="30" required pattern="[a-zA-Z0-9\s]+"></td>
+            </tr>
+            <tr>
+                <td>Customer Address 1:</td>
+                <td><textarea name="customerAddress1" rows="3" cols="30" required></textarea></td>
+            </tr>
+            <tr>
+                <td>Customer Address 2:</td>
+                <td><textarea name="customerAddress2" rows="3" cols="30"></textarea></td>
+            </tr>
+            <tr>
+                <td>Customer Pin Code:</td>
+                <td><input type="number" name="customerPinCode" size="6" min="100000" required></td>
+            </tr>
+            <tr>
+                <td>E-mail address:</td>
+                <td><input type="email" name="email" size="100" required></td>
+            </tr>
+            <tr>
+                <td>Contact Number:</td>
+                <td><input type="text" name="contactNumber" size="20"></td>
+            </tr>
+            <tr>
+                <td>Primary Contact Person:</td>
+                <td><input type="text" name="primaryContactPerson" size="100" required></td>
+            </tr>
+            <tr>
+                <td>Record Status:</td>
+                <td>
+                    <select name="recordStatus" required>
+                        <option value="N">New</option>
+                        <option value="M">Modified</option>
+                        <option value="D">Deleted</option>
+                        <option value="A">Authorized</option>
+                        <option value="R">Rejected</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Active/Inactive Flag:</td>
+                <td>
+                    <select name="activeInactiveFlag" required>
+                        <option value="A">Active</option>
+                        <option value="I">Inactive</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="submit" value="Register">
+                </td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Registration Form</title>
+</head>
+<body>
+    <h1>Registration Form</h1>
+    <form method="post" action="register.jsp">
+        <table>
+            <tr>
+                <td>Customer ID Number:</td>
+                <td><input type="text" name="customerId" size="10" disabled></td>
+            </tr>
+            <tr>
+                <td>Customer Code:</td>
+                <td><input type="text" name="customerCode" size="10" maxlength="10" required></td>
+            </tr>
+            <tr>
+                <td>Customer Name:</td>
+                <td><input type="text" name="customerName" size="30" maxlength="30" required pattern="[a-zA-Z0-9\s]+"></td>
+            </tr>
+            <tr>
+                <td>Customer Address 1:</td>
+                <td><textarea name="customerAddress1" rows="3" cols="30" required></textarea></td>
+            </tr>
+            <tr>
+                <td>Customer Address 2:</td>
+                <td><textarea name="customerAddress2" rows="3" cols="30"></textarea></td>
+            </tr>
+            <tr>
+                <td>Customer Pin Code:</td>
+                <td><input type="number" name="customerPinCode" size="6" min="100000" required></td>
+            </tr>
+            <tr>
+                <td>E-mail address:</td>
+                <td><input type="email" name="email" size="100" required></td>
+            </tr>
+            <tr>
+                <td>Contact Number:</td>
+                <td><input type="text" name="contactNumber" size="20"></td>
+            </tr>
+            <tr>
+                <td>Primary Contact Person:</td>
+                <td><input type="text" name="primaryContactPerson" size="100" required></td>
+            </tr>
+            <tr>
+                <td>Record Status:</td>
+                <td>
+                    <select name="recordStatus" required>
+                        <option value="N">New</option>
+                        <option value="M">Modified</option>
+                        <option value="D">Deleted</option>
+                        <option value="A">Authorized</option>
+                        <option value="R">Rejected</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Active/Inactive Flag:</td>
+                <td>
+                    <select name="activeInactiveFlag" required>
+                        <option value="A">Active</option>
+                        <option value="I">Inactive</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="submit" name="action" value="Add">
+                    <input type="submit" name="action" value="Update">
+                    <input type="submit" name="action" value="Delete">
+                    <input type="submit" name="action" value="Save">
+                </td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>My Web Application</title>
+</head>
+<body>
+    <h1>Welcome to My Web Application</h1>
+    <jsp:include page="register.jsp" />
+</body>
+</html>
+
+
+
+
+<form method="post" action="registerServlet">
+    <!-- registration form fields go here -->
+</form>
+
+
+
+In this example, the form action points to a servlet named registerServlet which will handle the form submission and perform the necessary processing.
+
+Note: Make sure to update the form action and other URLs in the registration form code to match the actual URLs of your web application, and configure the appropriate servlet mappings in your web application's web.xml file if necessary.
+
+With these changes, you should be able to run your web application and access the registration form through the index.jsp page.
+
+
+
+
+
+
+
+
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Checker Form</title>
+</head>
+<body>
+    <h1>Checker Form</h1>
+    <form method="post" action="checkerServlet">
+        <table>
+            <tr>
+                <th>Customer ID</th>
+                <th>Customer Code</th>
+                <th>Customer Name</th>
+                <th>Customer Address 1</th>
+                <th>Customer Address 2</th>
+                <th>Customer Pin Code</th>
+                <th>E-mail Address</th>
+                <th>Contact Number</th>
+                <th>Primary Contact Person</th>
+                <th>Record Status</th>
+                <th>Action</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>C001</td>
+                <td>John Doe</td>
+                <td>123 Main St</td>
+                <td></td>
+                <td>123456</td>
+                <td>john.doe@example.com</td>
+                <td>123-456-7890</td>
+                <td>John</td>
+                <td>N</td>
+                <td>
+                    <select name="status1">
+                        <option value="approve">Approve</option>
+                        <option value="reject">Reject</option>
+                    </select>
+                </td>
+            </tr>
+            <!-- Add more rows for each customer -->
+        </table>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
