@@ -266,3 +266,230 @@ With these changes, you should be able to run your web application and access th
     </form>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Page</title>
+</head>
+<body>
+    <h1>Login Page</h1>
+    <form action="/login" method="post">
+        <label for="username">User Name:</label>
+        <input type="text" id="username" name="username" required><br><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br><br>
+        <input type="submit" value="Login">
+    </form>
+</body>
+</html>
+
+
+
+
+
+
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        // Configure authentication for first login path ("/login1")
+        auth.inMemoryAuthentication()
+            .withUser("user1")
+            .password("{noop}password1") // Use "{noop}" prefix for plain text password
+            .roles("USER");
+        
+        // Configure authentication for second login path ("/login2")
+        auth.inMemoryAuthentication()
+            .withUser("user2")
+            .password("{noop}password2") // Use "{noop}" prefix for plain text password
+            .roles("USER");
+    }
+    
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+            .authorizeRequests()
+                .antMatchers("/login1").permitAll() // Allow access to first login path without authentication
+                .antMatchers("/login2").permitAll() // Allow access to second login path without authentication
+                .anyRequest().authenticated() // Require authentication for all other requests
+                .and()
+            .formLogin()
+                .loginPage("/login1") // Use first login path as login page
+                .loginProcessingUrl("/login1") // Use first login path for login processing
+                .and()
+            .formLogin()
+                .loginPage("/login2") // Use second login path as login page
+                .loginProcessingUrl("/login2"); // Use second login path for login processing
+    }
+}
+
+
+
+
+
+
+@Entity
+@Table(name = "customers")
+public class Customer {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "customer_id")
+    private Long customerId;
+    
+    @Column(name = "customer_code")
+    private String customerCode;
+    
+    @Column(name = "customer_name")
+    private String customerName;
+    
+    @Column(name = "customer_address1")
+    private String customerAddress1;
+    
+    @Column(name = "customer_address2")
+    private String customerAddress2;
+    
+    @Column(name = "customer_pincode")
+    private String customerPincode;
+    
+    @Column(name = "email_address")
+    private String emailAddress;
+    
+    @Column(name = "contact_number")
+    private String contactNumber;
+    
+    @Column(name = "primary_contact_person")
+    private String primaryContactPerson;
+    
+    @Column(name = "record_status")
+    private String recordStatus;
+    
+    @Column(name = "active_inactive_flag")
+    private String activeInactiveFlag;
+    
+    @Column(name = "create_date")
+    private Date createDate;
+    
+    @Column(name = "created_by")
+    private String createdBy;
+    
+    @Column(name = "modified_date")
+    private Date modifiedDate;
+    
+    @Column(name = "modified_by")
+    private String modifiedBy;
+    
+    @Column(name = "authorized_date")
+    private Date authorizedDate;
+    
+    @Column(name = "authorized_by")
+    private String authorizedBy;
+    
+    // Getters and Setters
+    // ...
+}
+
+
+
+
+
+
+
+
+
+Create a JSP form page (customerForm.jsp) to capture customer data:
+
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Customer Form</title>
+</head>
+<body>
+    <h1>Customer Form</h1>
+    <form action="/saveCustomer" method="post">
+        <label for="customerCode">Customer Code:</label>
+        <input type="text" id="customerCode" name="customerCode" required><br><br>
+        <label for="customerName">Customer Name:</label>
+        <input type="text" id="customerName" name="customerName" required pattern="[a-zA-Z0-9]+" title="Only letters and digits are allowed"><br><br>
+        <label for="customerAddress1">Customer Address 1:</label>
+        <textarea id="customerAddress1" name="customerAddress1" required></textarea><br><br>
+        <label for="customerAddress2">Customer Address 2:</label>
+        <textarea id="customerAddress2" name="customerAddress2"></textarea><br><br>
+        <label for="customerPincode">Customer Pincode:</label>
+        <input type="number" id="customerPincode" name="customerPincode" required min="100000" max="999999"><br><br>
+        <label for="emailAddress">E-mail Address:</label>
+        <input type="email" id="emailAddress" name="emailAddress" required><br><br>
+        <label for="contactNumber">Contact Number:</label>
+        <input type="text" id="contactNumber" name="contactNumber"><br><br>
+        <label for="primaryContactPerson">Primary Contact Person:</label>
+<input type="text" id="primaryContactPerson" name="primaryContactPerson" required><br><br>
+<label for="recordStatus">Record Status:</label>
+<select id="recordStatus" name="recordStatus" required>
+    <option value="N">New</option>
+    <option value="M">Modified</option>
+    <option value="D">Deleted</option>
+    <option value="A">Authorized</option>
+    <option value="R">Rejected</option>
+</select><br><br>
+<label for="activeInactiveFlag">Active/Inactive Flag:</label>
+<select id="activeInactiveFlag" name="activeInactiveFlag" required>
+    <option value="A">Active</option>
+    <option value="I">Inactive</option>
+</select><br><br>
+<input type="submit" value="Save">
+</form>
+</body>
+</html>
+
+
+
+
+
+Controller to handle form submission and saving data to the database
+@Controller
+public class CustomerController {
+    @Autowired
+    private CustomerService customerService;
+
+    @PostMapping("/saveCustomer")
+    public String saveCustomer(@ModelAttribute("customer") Customer customer) {
+        customerService.saveCustomer(customer);
+        return "redirect:/customerList";
+    }
+}
+
+
+
+Service layer to handle business logic
+
+@Service
+public class CustomerService {
+    @Autowired
+    private CustomerRepository customerRepository;
+
+    public void saveCustomer(Customer customer) {
+        customerRepository.save(customer);
+    }
+}
+
+
+Repository to handle database operations
+
+@Repository
+public interface CustomerRepository extends JpaRepository<Customer, Long> {
+}
