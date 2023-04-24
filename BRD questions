@@ -1,0 +1,15 @@
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        List<String> names = new ArrayList<>(Arrays.asList("Harsh", "Ranjan", "Harsh"));
+        List<String> newNames = new ArrayList<>();
+        for (String name : names) {
+            if (!newNames.contains(name)) {
+                newNames.add(name);
+            }
+        }
+        names = newNames;
+        System.out.println(names);  // Output: [Harsh, Ranjan]
+    }
+}
