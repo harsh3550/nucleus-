@@ -297,12 +297,13 @@ public class TestMain2 {
         customerTable.add(cus3);
         System.out.println(customerTable);
 
-        Collections.sort(customerTable, (cus1,cus2,cus3) -> cus1.getAge() - cus2.getAge() - cus3.getAge);
+        Collections.sort(customerTable, (cus1, cus2) -> cus1.getAge() - cus2.getAge());
 
         for (customer customer : customerTable) {
             System.out.println(customer.getName() + ", " + customer.getAge() + ", " + customer.getAddress());
         }
-        customerTable.removeIf(cus1.getAge() -> cus2.getAge() -> cus3.getAge() -> 23);
+        customerTable.removeIf(cus -> cus.getAge() < 21);
+        System.out.println(customerTable);
     }
 }
 
