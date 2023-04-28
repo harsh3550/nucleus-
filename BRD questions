@@ -13,3 +13,10 @@ public class Main {
         System.out.println(names);  // Output: [Harsh, Ranjan]
     }
 }
+
+
+
+
+for (String line; (line = br.readLine()) != null; ) {
+                    empsData.add(line);
+                }
