@@ -134,3 +134,93 @@ public class Service {
         }
     }
 }
+
+
+
+
+package service;
+
+import exception.DetailsNotAvailableException;
+import model.Employee;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+
+public class Service {
+
+    public static Properties getProperties(String fileName) throws IOException {
+        Properties prop = new Properties();
+        try (FileInputStream fis = new FileInputStream(fileName)) {
+            prop.load(fis);
+        }
+        return prop;
+    }
+
+    public static void readDataFromFileAndReturnEmployee(String name) {
+        List<Employee> employees = new ArrayList<>();
+
+        try {
+            Properties properties = getProperties("fileName.properties");
+            File file = new File(properties.getProperty(name));
+            if (!file.exists()) {
+                throw new DetailsNotAvailableException("File Not Found");
+            }
+            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                String empName = reader.readLine();
+                String email = reader.readLine();
+                String qualification = reader.readLine();
+                double yearsOfExperience = Double.parseDouble(reader.readLine());
+                String dateOfBirth = reader.readLine();
+                Employee emp = new Employee(empName, email, qualification, yearsOfExperience, dateOfBirth);
+                employees.add(setDesignation(emp));
+            }
+        } catch (IOException ex) {
+            throw new DetailsNotAvailableException("File Not Found");
+        }
+        storeDetailsOfEmployees(employees);
+        serializeToStore(employees);
+    }
+
+    public static Employee setDesignation(Employee emp) {
+        double yoe = emp.getYearsOfExperience();
+        String empQual = emp.getQualification();
+        if (yoe > 0.0 && yoe <= 1.0 && empQual.equals("B.tech")) {
+            emp.setDesignation("ASE");
+        } else if (yoe > 3.0 && yoe <= 5.0 && empQual.equals("MCA")) {
+            emp.setDesignation("TL");
+        } else if (yoe > 5.0 && (empQual.equals("MCA") || empQual.equals("B.tech"))) {
+            emp.setDesignation("Project Manager");
+        } else if (yoe > 1.0 && yoe <= 3.0 && (empQual.equals("B.tech") || empQual.equals("MCA"))) {
+            emp.setDesignation("SE");
+        }
+        return emp;
+    }
+
+    public static void storeDetailsOfEmployees(List<Employee> employees) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter("detailsOfEmployee.txt"))) {
+            for (Employee employee : employees) {
+                writer.println("Name : " + employee.getEmpName());
+                writer.println("DOB : " + employee.getDateOfBirth());
+                writer.println("Email : " + employee.getEmail());
+                writer.println("Qualification : " + employee.getQualification());
+                writer.println("Designation : " + employee.getDesignation());
+                writer.println("YOE : " + employee.getYearsOfExperience());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void serializeToStore(List<Employee> employees) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("details.txt"))) {
+            for (Employee employee : employees) {
+                oos.writeObject(employee);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
