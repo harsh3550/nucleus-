@@ -492,3 +492,17 @@ public class ExamServlet extends HttpServlet {
 
 
 Ma'am, the leave requisition management system is currently under maintenance. So, I am taking leave now and will update it later when the site is functioning properly
+
+
+Dear [Manager's Name],
+
+I am writing to inform you that I experienced a delay on my train this morning, which caused me to arrive late to the office today. I apologize for any inconvenience this may have caused.
+
+I arrived at the office at 2:35 PM and will work diligently to catch up on any missed work. Please let me know if there are any urgent tasks that need my attention, and I will prioritize them accordingly.
+
+Thank you for your understanding.
+
+Best regards,
+
+[Your Name]
+
