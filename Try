@@ -249,48 +249,6 @@ public class CharacterCounter {
 
 
 
-Exam Session Management.
-
-
-Harsh Ranjan
-2. A table contains 10 MCQ questions. When user takes exam, 3 questions are randomly picked from the table and displayed. Maximum of 3 mins is given for the exam. Each question is displayed in a separate page. The user can use next and prev buttons to navigate. The first question page should not have prev button and last question page should not have next button. There should be a finish button in every question page When user clicks on the finish button or if the time is beyond 3 mins, the result page with marks must be displayed.
-
-If user accidently closes the browser, then he must be able to resume the exam. To provide this facility, whenever any attribute is added or updated in the session, it must be added to the database too. Similarly whenever it is removed, it must be removed. Apart from that status of the exam must also be maintained.
-
-On requesting for exam page, if the exam status is incomplete, then the last question that user attempted must be shown. User must be able to resume seamlessly.
-
-To implement the above functionality, we can follow the following steps:
-
-Create a database table to store the exam questions and their answers. The table should have the following columns: question_id, question_text, option_1, option_2, option_3, option_4, correct_answer.
-
-Create a user table to store user information like user_id, name, email, and password.
-
-Create a session table to store session information like session_id, user_id, exam_status, current_question_id, and timestamp.
-
-When the user logs in, start a new session and store the session_id in a cookie. If the user has an existing session, retrieve the session data from the session table.
-
-On the exam page, retrieve the current session data from the session table using the session_id stored in the cookie.
-
-If the exam status is incomplete, retrieve the last question attempted by the user from the session data and display it on the current page. Otherwise, select 3 random questions from the question table and display them on the current page.
-
-For each question, display the question text and its options in a separate page. The first question page should not have a prev button and the last question page should not have a next button.
-
-When the user clicks the next button, store the user's answer for the current question in the session data and update the current_question_id in the session table.
-
-When the user clicks the finish button or if the time is beyond 3 mins, calculate the user's score by comparing the user's answers in the session data with the correct answers in the question table. Store the score and exam status as "complete" in the session data and update the session table.
-
-If the user accidentally closes the browser, retrieve the session data from the session table using the session_id stored in the cookie and resume the exam from where the user left off.
-
-Whenever any attribute is added or updated in the session data, update the session table accordingly. Similarly, when any attribute is removed from the session data, remove it from the session table.
-
-Finally, display the user's score on the result page along with the correct answers to the questions attempted by the user.
-
-
-
-
-
-
-
 import java.io.*;
 import java.util.*;
 import javax.servlet.*;
@@ -490,19 +448,4 @@ public class ExamServlet extends HttpServlet {
 </script
 
 
-
-Ma'am, the leave requisition management system is currently under maintenance. So, I am taking leave now and will update it later when the site is functioning properly
-
-
-Dear [Manager's Name],
-
-I am writing to inform you that I experienced a delay on my train this morning, which caused me to arrive late to the office today. I apologize for any inconvenience this may have caused.
-
-I arrived at the office at 2:35 PM and will work diligently to catch up on any missed work. Please let me know if there are any urgent tasks that need my attention, and I will prioritize them accordingly.
-
-Thank you for your understanding.
-
-Best regards,
-
-[Your Name]
 
