@@ -1,4 +1,40 @@
+
 package review;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
+public class TestMain {
+    public static void main(String[] args) {
+        ArrayList<Customer> cus = new ArrayList<>();
+
+        cus.add(new Customer("Harsh", 22, "101"));
+        cus.add(new Customer("sourav", 24, "102"));
+        cus.add(new Customer("Amar", 24, "102"));
+        cus.add(new Customer("puja", 19, "105"));
+        cus.add(new Customer("Nalin", 25, "106"));
+        cus.add(new Customer("Aakash", 25, "109"));
+
+        Comparator<Customer> customerComparator = new Comparator<Customer>() {
+            @Override
+            public int compare(Customer c1, Customer c2) {
+                int ageComp = Integer.compare(c1.getAge(), c2.getAge());
+                if (ageComp != 0) {
+                    return ageComp;
+                }
+                return c1.getName().compareTo(c2.getName());
+            }
+        };
+
+        Collections.sort(cus, customerComparator);
+        System.out.println(cus);
+    }
+}
+
+
+
+age review;
 
 public class Customer{
 
