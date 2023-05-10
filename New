@@ -100,4 +100,31 @@ public class TestMain {
     }
 }
 
+
+
+package review;
+
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class TestMain {
+    public static void main(String[] args) {
+        ArrayList<Customer> cus = new ArrayList<>();
+
+        cus.add(new Customer("Harsh", 22, "101"));
+        cus.add(new Customer("sourav", 24, "102"));
+        cus.add(new Customer("Amar", 24, "102"));
+        cus.add(new Customer("puja", 19, "105"));
+        cus.add(new Customer("Nalin", 25, "106"));
+        cus.add(new Customer("Aakash", 25, "109"));
+
+        Comparator<Customer> ageNameComparator = Comparator.comparingInt(Customer::getAge)
+                .thenComparing(Customer::getName);
+
+        Collections.sort(cus, ageNameComparator);
+        System.out.println(cus);
+    }
+}
+
+
 change in the test main so that first it compare the object with the age and then age same then compare it with name
