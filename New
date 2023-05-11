@@ -1,3 +1,99 @@
+package review;
+
+public class Customer{
+
+    private String Name;
+    private int age;
+    private String id;
+
+    public String getName() {
+        return Name;
+    }
+
+    public void setName(String name) {
+        Name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Customer(String name, int age, String id) {
+        Name = name;
+        this.age = age;
+        this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "Name='" + Name + '\'' +
+                ", age=" + age +
+                ", id='" + id + '\'' +
+                '}';
+    }
+}
+
+
+
+
+
+package review;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
+public class TestMain {
+    public static void main(String[] args) {
+        ArrayList<Customer> cus = new ArrayList<>();
+
+        cus.add(new Customer("Harsh", 22, "101"));
+        cus.add(new Customer("sourav", 24, "102"));
+        cus.add(new Customer("Amar", 24, "102"));
+        cus.add(new Customer("puja", 19, "105"));
+        cus.add(new Customer("Nalin", 25, "106"));
+        cus.add(new Customer("Aakash", 25, "109"));
+
+        Comparator<Customer> ageNameComparator = Comparator.comparingInt(Customer::getAge)
+                .thenComparing(Customer::getName);
+        Collections.sort(cus, ageNameComparator);
+        System.out.println(cus);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 package review;
 
