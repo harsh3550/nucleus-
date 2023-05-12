@@ -1,3 +1,108 @@
+A Life Insurance Company is selling multiple insurance policies.
+
+ 
+
+Each policy type will have the following information.
+
+ 
+
+- Scheme number, 
+- Policy name (Ex. Jeevan Mitra, Jeevan Anurag, Jeevan Vishwas etc)
+- Policy type (Term, Money back)
+- Maximum of number of years, 
+- Premium rate per year per lakh, 
+- Maximum sum assured (Ex. 10 Lakh, 20 Lakh etc.)
+
+ 
+
+ 
+Customer can take any type of policy available. Customer needs to provide the following personal information for registration.
+
+ 
+
+- Customer name, age, gender, address and phone number.
+
+ 
+
+
+Customer needs to specify the following to take a policy.
+
+ 
+
+- Policy name that he/she interested in, 
+- Sum Assured that he/she needs, 
+- No. of years that he/she wants to be insured, 
+- premium payment cycle (monthly/quarterly/annual)
+
+ 
+
+ 
+System validates that the sum assured and no of years given by the customer 
+does not exceed the limits defined. Also, the system generates the policy number and 
+calculates the premium based on the premium rate defined in the scheme. 
+And it assigns the premium to the policy number based on the premium payment cycle.
+
+ 
+
+For Example:
+
+ 
+
+If Jeevan Mitra has a premium rate of Rs.500 per year per lakh and customer takes Jeevan Mitra 
+with sum assured of Rs.2,00,000 and with quarterly payment, the following will be the calculated
+premium.
+
+ 
+
+Premium/year = Sum Assured*premium rate/1,00,000 = Rs.1000
+
+ 
+
+Premium/quarter = Rs.1000/4 = Rs.250
+
+ 
+
+ 
+Write a code to perform the following operations:
+
+ 
+
+- Add a policy scheme
+- View all policy schemes available.
+- Add customer
+- Assign policy to Customer
+- View all policies for the given customer
+- View all policies
+
+ 
+
+
+Functional Requirements from the application:
+- Proper Modularity 
+- Proper Naming Convention
+- Proper Inheritance and Composition
+- Use of correct Collection 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Create an application in which an employee can apply for leaves. There are three kinds of leaves available:
 Annual Leave - 10
 Sick Leave - 10
