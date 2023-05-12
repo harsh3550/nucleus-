@@ -87,6 +87,159 @@ Functional Requirements from the application:
 
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+enum PolicyType {
+    TERM, MONEY_BACK
+}
+
+class PolicyScheme {
+    private int schemeNumber;
+    private String policyName;
+    private PolicyType policyType;
+    private int maxYears;
+    private double premiumRatePerLakh;
+    private int maxSumAssured;
+
+    public PolicyScheme(int schemeNumber, String policyName, PolicyType policyType,
+                        int maxYears, double premiumRatePerLakh, int maxSumAssured) {
+        this.schemeNumber = schemeNumber;
+        this.policyName = policyName;
+        this.policyType = policyType;
+        this.maxYears = maxYears;
+        this.premiumRatePerLakh = premiumRatePerLakh;
+        this.maxSumAssured = maxSumAssured;
+    }
+
+    public int getSchemeNumber() {
+        return schemeNumber;
+    }
+
+    public String getPolicyName() {
+        return policyName;
+    }
+
+    public PolicyType getPolicyType() {
+        return policyType;
+    }
+
+    public int getMaxYears() {
+        return maxYears;
+    }
+
+    public double getPremiumRatePerLakh() {
+        return premiumRatePerLakh;
+    }
+
+    public int getMaxSumAssured() {
+        return maxSumAssured;
+    }
+}
+
+class Customer {
+    private String name;
+    private int age;
+    private String gender;
+    private String address;
+    private String phone;
+
+    public Customer(String name, int age, String gender, String address, String phone) {
+        this.name = name;
+        this.age = age;
+        this.gender = gender;
+        this.address = address;
+        this.phone = phone;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+}
+
+class Policy {
+    private String policyNumber;
+    private Customer customer;
+    private PolicyScheme policyScheme;
+    private int sumAssured;
+    private int years;
+    private String paymentCycle;
+    private double premium;
+
+    public Policy(String policyNumber, Customer customer, PolicyScheme policyScheme,
+                  int sumAssured, int years, String paymentCycle, double premium) {
+        this.policyNumber = policyNumber;
+        this.customer = customer;
+        this.policyScheme = policyScheme;
+        this.sumAssured = sumAssured;
+        this.years = years;
+        this.paymentCycle = paymentCycle;
+        this.premium = premium;
+    }
+
+    public String getPolicyNumber() {
+        return policyNumber;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public PolicyScheme getPolicyScheme() {
+        return policyScheme;
+    }
+
+    public int getSumAssured() {
+        return sumAssured;
+    }
+
+    public int getYears() {
+        return years;
+    }
+
+    public String getPaymentCycle() {
+        return paymentCycle;
+    }
+
+    public double getPremium() {
+        return premium;
+    }
+}
+
+class PolicyManagementSystem {
+    private Map<Integer, PolicyScheme> policySchemes;
+    private List<Customer> customers;
+    private List<Policy> policies;
+
+    public PolicyManagementSystem() {
+        policySchemes = new HashMap<>();
+        customers = new ArrayList<>();
+        policies = new ArrayList<>();
+    }
+
+    public void addPolicyScheme(PolicyScheme policyScheme) {
+        policySchemes.put(policyScheme.getSchemeNumber(), policyScheme);
+    }
+
+    public void viewAllPolicySchemes() {
 
 
 
