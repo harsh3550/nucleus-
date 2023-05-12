@@ -1,3 +1,39 @@
+Create an application in which an employee can apply for leaves. There are three kinds of leaves available:
+Annual Leave - 10
+Sick Leave - 10
+Examination leave - 5 
+
+ 
+
+The employee can apply for leave after logging. When the user applies for any kind of leave, 
+it checks for whether those number of leaves are available or not. If yes, only then the employee
+can apply for leave otherwise an error message is displayed. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 package review;
 
 public class Customer{
