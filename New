@@ -11,6 +11,77 @@ can apply for leave otherwise an error message is displayed. 
 
 
 
+import java.util.Scanner;
+
+public class LeaveApplication {
+    // Define the leave limits
+    private static final int ANNUAL_LEAVE_LIMIT = 10;
+    private static final int SICK_LEAVE_LIMIT = 10;
+    private static final int EXAMINATION_LEAVE_LIMIT = 5;
+
+    // Define a static variable to hold the available leaves for each type
+    private static int availableAnnualLeaves = ANNUAL_LEAVE_LIMIT;
+    private static int availableSickLeaves = SICK_LEAVE_LIMIT;
+    private static int availableExamLeaves = EXAMINATION_LEAVE_LIMIT;
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter your name: ");
+        String name = scanner.nextLine();
+        System.out.println("Welcome, " + name);
+
+        // Allow the employee to apply for leave until they choose to exit
+        while (true) {
+            System.out.println("\nSelect leave type:");
+            System.out.println("1. Annual Leave");
+            System.out.println("2. Sick Leave");
+            System.out.println("3. Examination Leave");
+            System.out.println("4. Exit");
+
+            int choice = scanner.nextInt();
+            switch (choice) {
+                case 1:
+                    applyLeave("Annual Leave", availableAnnualLeaves, scanner);
+                    break;
+                case 2:
+                    applyLeave("Sick Leave", availableSickLeaves, scanner);
+                    break;
+                case 3:
+                    applyLeave("Examination Leave", availableExamLeaves, scanner);
+                    break;
+                case 4:
+                    System.out.println("Goodbye, " + name);
+                    System.exit(0);
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+
+    private static void applyLeave(String leaveType, int availableLeaves, Scanner scanner) {
+        System.out.println("\nApplying for " + leaveType);
+        System.out.print("Enter the number of days: ");
+        int days = scanner.nextInt();
+        if (days <= availableLeaves) {
+            switch (leaveType) {
+                case "Annual Leave":
+                    availableAnnualLeaves -= days;
+                    break;
+                case "Sick Leave":
+                    availableSickLeaves -= days;
+                    break;
+                case "Examination Leave":
+                    availableExamLeaves -= days;
+                    break;
+            }
+            System.out.println(days + " days of " + leaveType + " approved.");
+            System.out.println("Available " + leaveType + ": " + availableLeaves);
+        } else {
+            System.out.println("Insufficient " + leaveType + ". Please try again.");
+        }
+    }
+}
+
 
 
 
