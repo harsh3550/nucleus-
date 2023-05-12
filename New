@@ -14,6 +14,93 @@ can apply for leave otherwise an error message is displayed. 
 import java.util.Scanner;
 
 public class LeaveApplication {
+    private int annualLeave;
+    private int sickLeave;
+    private int examLeave;
+
+    public LeaveApplication() {
+        this.annualLeave = 10;
+        this.sickLeave = 10;
+        this.examLeave = 5;
+    }
+
+    public void applyLeave(String leaveType, int noOfDays) {
+        boolean isLeaveApproved = false;
+
+        switch(leaveType) {
+            case "Annual":
+                if (noOfDays <= annualLeave) {
+                    annualLeave -= noOfDays;
+                    isLeaveApproved = true;
+                }
+                break;
+            case "Sick":
+                if (noOfDays <= sickLeave) {
+                    sickLeave -= noOfDays;
+                    isLeaveApproved = true;
+                }
+                break;
+            case "Exam":
+                if (noOfDays <= examLeave) {
+                    examLeave -= noOfDays;
+                    isLeaveApproved = true;
+                }
+                break;
+            default:
+                System.out.println("Invalid leave type. Please select either Annual, Sick or Exam leave.");
+        }
+
+        if (isLeaveApproved) {
+            System.out.println("Your " + leaveType + " leave application for " + noOfDays + " day(s) has been approved.");
+            System.out.println("Remaining " + leaveType + " leave balance: " + getLeaveBalance(leaveType));
+        } else {
+            System.out.println("Your " + leaveType + " leave application for " + noOfDays + " day(s) has been rejected due to insufficient leave balance.");
+            System.out.println("Remaining " + leaveType + " leave balance: " + getLeaveBalance(leaveType));
+        }
+    }
+
+    public int getLeaveBalance(String leaveType) {
+        switch(leaveType) {
+            case "Annual":
+                return annualLeave;
+            case "Sick":
+                return sickLeave;
+            case "Exam":
+                return examLeave;
+            default:
+                System.out.println("Invalid leave type. Please select either Annual, Sick or Exam leave.");
+                return 0;
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        LeaveApplication leaveApplication = new LeaveApplication();
+
+        System.out.println("Welcome to the leave application portal.");
+
+        while(true) {
+            System.out.println("Please select the type of leave you want to apply for (Annual, Sick, Exam) or enter 'exit' to quit:");
+            String leaveType = scanner.nextLine();
+
+            if (leaveType.equals("exit")) {
+                break;
+            }
+
+            System.out.println("Please enter the number of days you want to apply for:");
+            int noOfDays = scanner.nextInt();
+            scanner.nextLine();
+
+            leaveApplication.applyLeave(leaveType, noOfDays);
+        }
+    }
+}
+
+
+
+import java.util.Scanner;
+
+public class LeaveApplication {
     // Define the leave limits
     private static final int ANNUAL_LEAVE_LIMIT = 10;
     private static final int SICK_LEAVE_LIMIT = 10;
