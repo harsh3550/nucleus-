@@ -245,7 +245,16 @@ class PolicyManagementSystem {
 
 
 
+In this code, we have three classes - Customer, Policy, and PolicyManagementSystem. Customer class represents the customers of the insurance company. Policy class represents the policies that the company issues to its customers. PolicyManagementSystem class is the main class that manages the policies and customers of the company.
 
+The PolicyManagementSystem class has three lists - policySchemes, customers, and policies. policySchemes list contains all the policy schemes that the company offers. customers list contains all the customers of the company. policies list contains all the policies issued by the company.
+
+The PolicyManagementSystem class has several methods to add policy schemes and customers, view all policy schemes
+
+
+
+
+Send a message.
 
 
 
@@ -428,10 +437,102 @@ public class LeaveApplication {
 }
 
 
+public void addCustomer(Customer customer) {
+    customers.add(customer);
+}
+
+public void viewAllCustomers() {
+    for (Customer customer : customers) {
+        System.out.println(customer.getName() + " - " + customer.getPhone());
+    }
+}
+
+public void issuePolicy(Customer customer, PolicyScheme policyScheme, int sumAssured,
+                        int years, String paymentCycle, double premium) {
+    String policyNumber = generatePolicyNumber();
+    Policy policy = new Policy(policyNumber, customer, policyScheme, sumAssured,
+            years, paymentCycle, premium);
+    policies.add(policy);
+    System.out.println("Policy issued with policy number: " + policyNumber);
+}
+
+private String generatePolicyNumber() {
+    Random random = new Random();
+    return "POL-" + random.nextInt(10000);
+}
+
+public void viewAllPolicies() {
+    for (Policy policy : policies) {
+        System.out.println("Policy Number: " + policy.getPolicyNumber());
+        System.out.println("Customer Name: " + policy.getCustomer().getName());
+        System.out.println("Policy Scheme: " + policy.getPolicyScheme().getSchemeName());
+        System.out.println("Sum Assured: " + policy.getSumAssured());
+        System.out.println("Years: " + policy.getYears());
+        System.out.println("Payment Cycle: " + policy.getPaymentCycle());
+        System.out.println("Premium: " + policy.getPremium());
+        System.out.println("--------------------------------------");
+    }
+}
+
+public List<Policy> getPoliciesForCustomer(Customer customer) {
+    List<Policy> policiesForCustomer = new ArrayList<>();
+    for (Policy policy : policies) {
+        if (policy.getCustomer().equals(customer)) {
+            policiesForCustomer.add(policy);
+        }
+    }
+    return policiesForCustomer;
+}
+
+public double calculatePremium(PolicyScheme policyScheme, int sumAssured, int years) {
+    double premium = policyScheme.getPremiumRate() * sumAssured / 1000 * years;
+    if (policyScheme.isBonusApplicable()) {
+        premium += premium * policyScheme.getBonusRate() / 100;
+    }
+    return premium;
+}
 
 
+}
+
+class PolicyScheme {
+private int schemeNumber;
+private String schemeName;
+private double premiumRate;
+private boolean bonusApplicable;
+private double bonusRate;
+
+csharp
 
 
+public PolicyScheme(int schemeNumber, String schemeName, double premiumRate,
+                    boolean bonusApplicable, double bonusRate) {
+    this.schemeNumber = schemeNumber;
+    this.schemeName = schemeName;
+    this.premiumRate = premiumRate;
+    this.bonusApplicable = bonusApplicable;
+    this.bonusRate = bonusRate;
+}
+
+public int getSchemeNumber() {
+    return schemeNumber;
+}
+
+public String getSchemeName() {
+    return schemeName;
+}
+
+public double getPremiumRate() {
+    return premiumRate;
+}
+
+public boolean isBonusApplicable() {
+    return bonusApplicable;
+}
+
+public double getBonusRate() {
+    return bonusRate;
+}
 
 
 
