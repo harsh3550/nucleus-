@@ -85,6 +85,261 @@ Functional Requirements from the application:
 
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+enum PolicyType {
+    TERM, MONEY_BACK;
+}
+
+class Policy {
+    private int schemeNumber;
+    private String policyName;
+    private PolicyType policyType;
+    private int maxYears;
+    private double premiumRate;
+    private int maxSumAssured;
+
+    public Policy(int schemeNumber, String policyName, PolicyType policyType, int maxYears, double premiumRate,
+            int maxSumAssured) {
+        this.schemeNumber = schemeNumber;
+        this.policyName = policyName;
+        this.policyType = policyType;
+        this.maxYears = maxYears;
+        this.premiumRate = premiumRate;
+        this.maxSumAssured = maxSumAssured;
+    }
+
+    public int getSchemeNumber() {
+        return schemeNumber;
+    }
+
+    public String getPolicyName() {
+        return policyName;
+    }
+
+    public PolicyType getPolicyType() {
+        return policyType;
+    }
+
+    public int getMaxYears() {
+        return maxYears;
+    }
+
+    public double getPremiumRate() {
+        return premiumRate;
+    }
+
+    public int getMaxSumAssured() {
+        return maxSumAssured;
+    }
+}
+
+class Customer {
+    private String name;
+    private int age;
+    private String gender;
+    private String address;
+    private String phone;
+
+    public Customer(String name, int age, String gender, String address, String phone) {
+        this.name = name;
+        this.age = age;
+        this.gender = gender;
+        this.address = address;
+        this.phone = phone;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+}
+
+class PolicyAssignment {
+    private int policyNumber;
+    private int customerId;
+    private String policyName;
+    private int sumAssured;
+    private int years;
+    private String premiumCycle;
+    private double premium;
+
+    public PolicyAssignment(int policyNumber, int customerId, String policyName, int sumAssured, int years,
+            String premiumCycle, double premium) {
+        this.policyNumber = policyNumber;
+        this.customerId = customerId;
+        this.policyName = policyName;
+        this.sumAssured = sumAssured;
+        this.years = years;
+        this.premiumCycle = premiumCycle;
+        this.premium = premium;
+    }
+
+    public int getPolicyNumber() {
+        return policyNumber;
+    }
+
+    public int getCustomerId() {
+        return customerId;
+    }
+
+    public String getPolicyName() {
+        return policyName;
+    }
+
+    public int getSumAssured() {
+        return sumAssured;
+    }
+
+    public int getYears() {
+        return years;
+    }
+
+    public String getPremiumCycle() {
+        return premiumCycle;
+    }
+
+    public double getPremium() {
+        return premium;
+    }
+}
+
+class PolicyManagementSystem {
+    private List<Policy> policies = new ArrayList<>();
+    private List<Customer> customers = new ArrayList<>();
+    private List<PolicyAssignment> policyAssignments = new ArrayList<>();
+    private Map<Integer, Policy> policyMap = new HashMap<>();
+
+    public void addPolicy(Policy policy) {
+        policies.add(policy);
+        policyMap.put(policy.getSchemeNumber(), policy);
+    }
+
+    public void viewAllPolicies() { System.out.println("Available policies:"); for (Policy policy : policies) { System.out.println(policy.getSchemeNumber() + " " + policy.getPolicyName() + " (" + policy.getPolicyType() + ") for a maximum of " + policy.getMaxYears() + " years, with premium rate of Rs." + policy.getPremiumRate() + " per year per lakh and a maximum sum assured of Rs." + policy.getMaxSumAssured()); } }
+public void addCustomer(Customer customer) {
+    customers.add(customer);
+}
+
+public void assignPolicy(int customerId, int schemeNumber, int sumAssured, int years, String premiumCycle) {
+    Policy policy = policyMap.get(schemeNumber);
+    double premium = sumAssured * policy.getPremiumRate() / 100000;
+    switch (premiumCycle.toLowerCase()) {
+        case "monthly":
+            premium /= 3;
+            break;
+        case "quarterly":
+            break;
+        case "annual":
+            premium *= 4;
+            break;
+        default:
+            System.out.println("Invalid premium cycle specified.");
+            return;
+    }
+    if (sumAssured > policy.getMaxSumAssured()) {
+        System.out.println("Sum assured exceeds the maximum limit for the selected policy.");
+        return;
+    }
+    if (years > policy.getMaxYears()) {
+        System.out.println("The selected policy is not available for the specified number of years.");
+        return;
+    }
+    int policyNumber = policyAssignments.size() + 1;
+    PolicyAssignment policyAssignment = new PolicyAssignment(policyNumber, customerId, policy.getPolicyName(),
+            sumAssured, years, premiumCycle, premium);
+    policyAssignments.add(policyAssignment);
+    System.out.println("Policy " + policyNumber + " assigned to customer " + customerId + " for policy "
+            + policy.getPolicyName() + " with sum assured of Rs." + sumAssured + " for " + years + " years and "
+            + premiumCycle + " premium payment cycle, with premium of Rs." + premium);
+}
+
+public void viewCustomerPolicies(int customerId) {
+    System.out.println("Policies assigned to customer " + customerId + ":");
+    for (PolicyAssignment policyAssignment : policyAssignments) {
+        if (policyAssignment.getCustomerId() == customerId) {
+            System.out.println(policyAssignment.getPolicyName() + " with sum assured of Rs."
+                    + policyAssignment.getSumAssured() + " for " + policyAssignment.getYears() + " years and "
+                    + policyAssignment.getPremiumCycle() + " premium payment cycle, with premium of Rs."
+                    + policyAssignment.getPremium());
+        }
+    }
+}
+
+public void viewAllPolicyAssignments() {
+    System.out.println("All policy assignments:");
+    for (PolicyAssignment policyAssignment : policyAssignments) {
+        System.out.println("Policy " + policyAssignment.getPolicyNumber() + " assigned to customer "
+                + policyAssignment.getCustomerId() + " for policy " + policyAssignment.getPolicyName()
+                + " with sum assured of Rs." + policyAssignment.getSumAssured() + " for "
+                + policyAssignment.getYears() + " years and " + policyAssignment.getPremiumCycle()
+                + " premium payment cycle, with premium of Rs." + policyAssignment.getPremium());
+    }
+}
+}
+
+public class Main { public static void main(String[] args) { PolicyManagementSystem policyManagementSystem = new PolicyManagementSystem();
+
+    // Add policies
+    Policy policy1 = new Policy(1, "Jeevan Mitra", PolicyType.TERM, 30, 500, 2000000);
+    Policy policy2 = new Policy(2, "Jeevan Anand", PolicyType.ENDOWMENT, 20, 1000, 5000000);
+    Policy policy3 = new Policy(3, "Jeevan Labh", PolicyType.MONEY_BACK, 25, 1500, 3000000);
+    
+    // Add policies to policy management system
+    policyManagementSystem.addPolicy(policy1);
+    policyManagementSystem.addPolicy(policy2);
+    policyManagementSystem.addPolicy(policy3);
+    
+    // Display all policies in the system
+    System.out.println("All policies in the system:");
+    policyManagementSystem.displayAllPolicies();
+    
+    // Search for a policy by ID
+    int policyId = 2;
+    Policy searchedPolicy = policyManagementSystem.searchPolicyById(policyId);
+    if (searchedPolicy != null) {
+        System.out.println("\nPolicy with ID " + policyId + " found:");
+        System.out.println(searchedPolicy);
+    } else {
+        System.out.println("\nPolicy with ID " + policyId + " not found.");
+    }
+    
+    // Remove a policy from the system
+    policyId = 1;
+    boolean isRemoved = policyManagementSystem.removePolicy(policyId);
+    if (isRemoved) {
+        System.out.println("\nPolicy with ID " + policyId + " removed successfully.");
+    } else {
+        System.out.println("\nPolicy with ID " + policyId + " not found in the system.");
+    }
+    
+    // Display all policies in the system again
+    System.out.println("\nAll policies in the system after removal:");
+    policyManagementSystem.displayAllPolicies();
+}
+}
+
+
+
+
+
 
 
 import java.util.ArrayList;
