@@ -1,4 +1,74 @@
 
+Order date Ship date
+Tard at ship_qt
+Status
+01/01/200 01/01/200
+200
+200
+Ontime
+2
+01/01/200 04/01/200
+300
+250
+Late
+150
+01/01/200
+Pendin g.
+I INTERNATIONALS Lid also maintains master data of all the items and their quantity present in
+neir stock in the ITEM table
+Description
+Column
+Item id
+Description
+Unit price
+Quantity on hand
+Datatype | Numeric
+Character
+Numeric
+Numeric
+Width
+20
+Total quantity in stock
+1) Identify the primary keys and foreign keys in the table above and the relationship between the tables. Also identify the integrity checks and referential integrity checks required to maintain the tables.
+2) Create the tables with required integrity checks
+3) Modify the Customer table and delete the FAX Column.
+4) Modify the customer table and decrease the size of the Address column from 20 to 15. Is it possible to change. If not what is the possible reason for the same?
+5) Display the item_id and the unit price of each item from the ITEM table, if the unit price is increased by 15 percent.
+6) Display the item_id and QOH of each item, giving ITEM CODE and QUANTITY ON HAND as heading respectively from the ITEM table.
+7) Display item_id, description and unit price of each item from the ITEM table, concatenating item_id and description in the following format:
+MO Treen
+Unit Price
+ii. I-Fresh Soap 25
+8) Display all data from CUSTOMER table in order of State column and within that on the basis of descending Company name from the CUSTOMER table.
+9) Display all items whose unit price is more than 50.
+10) Display all items whose unit price is from 50 to 100, and which have quantity on hand more than 500.
+11) Display all customers' data whose company name starts with 'A'.
+12) Display all the orders placed by a customer whose id is entered at runtime.
+13) Display the details of order for the customer, whose customer name is entered at runtime. In the next statement display details of all the orders other than the customer name entered before.
+14) Display the day on which order was placed. All the orders are ideally to be shipped within 3 days of order placement. Display the actual shipment date and the date 3 days after the order date.
+15) Display the rust wastedate forsteurnberof orders olaced tr that contomer anty it that
+2000 Dhanlay in Descending order
+17) Given a customer name display the total amount of all the orders placed by that
+18) Given an item Id, display who all customers have purchased that item before th mai
+2022,
+19) Display list of all orders who are late for more than 10 days
+20 create a view to display the list of all orders where quantity ordered is greater than quantity shipopd, Diglay the difference also,
+21) Wil sequence be same if i connect session and reconnect it later in oracle?
+2 What is the difference between Single view and complex view
+PLSQL
+create a trigger which will update the Discount column value whenever a new row in inserted in Sales Order table. The calculation for discount column is:
+if the quantity ordered is greater than 200, the discount is 15% the quantity ordered is less than 200, the discountis 10%
+Create a trigger which will be executed whenever a new record is inserted in ITEM table. It must check for the value of Quantity_on_hand column. It must not be less than 100. If the value is less than 100, it throws an exception otherwise the record is inserted in table.
+3. Create a function to calculate the final order amount for the orders placed by each customer. Use the function when displaying the records from customer table in the befow format.
+Cust_id Customer_name Total orders placed total_order_amount
+Create a procedure to take the item_id as input and print the total times the item has been purchased. If the item has never been purchased till now, throw 'No Data Found' Exception.
+5. Create a procedure which prints the details of all the orders placed by all the customers in the below mentioned format:
+Cust_name order_id total_items_in_order total_discount_availed total_quantity_placed total_quantity_shipped
+6. Is PLSQL faster than SQL? If yes, give the reason.
+7. Explain the difference between IN, OUT and INOUT parameters.
+8. Show code of a cursor For loop.
+9. Explain mutating table error.
+10. What is the difference between ROLLBACK and ROLLBACK TO.
 
 
 
