@@ -1,4 +1,44 @@
 
+Create an Employee Project Allocation Application. The employee can be of two types - Contractual and Permanent.
+
+Employee will have the below mentioned details:
+
+1. Employee Id
+
+2. Employee Name
+
+3. Year of Experience
+
+4. Technical Skills (Array of 5)
+
+5. Date of Joining
+
+The Project has the below mentioned details:
+
+1. Project Name
+
+2. Start Date
+
+3. End Date
+
+4. Maximum number of employees 5. Technical Skills required (array of 5)
+
+You need to create an application where the employees can be allocated to a certain Project. The conditions which need to be fulfilled are:
+
+1. One Employee can be allocated to only one Project.
+
+2. The Employee must have a minimum of two skills required for that project. 3. A Project can have maximum 5 contractual employees and rest all must be Permanent
+
+employees. 4. Once the maximum number of employees is reached, no more employees can be assigned to that Project.
+
+5. The employee can be assigned to a Project only if that employee doesn't have any
+
+Project allocated to him/her.
+
+Provide proper Inheritance, Composition and Modularity in the code. Use appropriate Collections where necessary.
+
+
+
 Order date Ship date
 Tard at ship_qt
 Status
