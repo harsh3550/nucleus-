@@ -1,4 +1,171 @@
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+class Employee {
+    private int employeeId;
+    private String employeeName;
+    private int yearOfExperience;
+    private List<String> technicalSkills;
+    private LocalDate dateOfJoining;
+    private Project allocatedProject;
+
+    public Employee(int employeeId, String employeeName, int yearOfExperience, List<String> technicalSkills, LocalDate dateOfJoining) {
+        this.employeeId = employeeId;
+        this.employeeName = employeeName;
+        this.yearOfExperience = yearOfExperience;
+        this.technicalSkills = technicalSkills;
+        this.dateOfJoining = dateOfJoining;
+    }
+
+    public int getEmployeeId() {
+        return employeeId;
+    }
+
+    public String getEmployeeName() {
+        return employeeName;
+    }
+
+    public int getYearOfExperience() {
+        return yearOfExperience;
+    }
+
+    public List<String> getTechnicalSkills() {
+        return technicalSkills;
+    }
+
+    public LocalDate getDateOfJoining() {
+        return dateOfJoining;
+    }
+
+    public Project getAllocatedProject() {
+        return allocatedProject;
+    }
+
+    public void setAllocatedProject(Project project) {
+        allocatedProject = project;
+    }
+}
+
+class ContractualEmployee extends Employee {
+    public ContractualEmployee(int employeeId, String employeeName, int yearOfExperience, List<String> technicalSkills, LocalDate dateOfJoining) {
+        super(employeeId, employeeName, yearOfExperience, technicalSkills, dateOfJoining);
+    }
+}
+
+class PermanentEmployee extends Employee {
+    public PermanentEmployee(int employeeId, String employeeName, int yearOfExperience, List<String> technicalSkills, LocalDate dateOfJoining) {
+        super(employeeId, employeeName, yearOfExperience, technicalSkills, dateOfJoining);
+    }
+}
+
+class Project {
+    private String projectName;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private int maxEmployees;
+    private List<String> requiredSkills;
+    private List<Employee> allocatedEmployees;
+
+    public Project(String projectName, LocalDate startDate, LocalDate endDate, int maxEmployees, List<String> requiredSkills) {
+        this.projectName = projectName;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.maxEmployees = maxEmployees;
+        this.requiredSkills = requiredSkills;
+        this.allocatedEmployees = new ArrayList<>();
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public int getMaxEmployees() {
+        return maxEmployees;
+    }
+
+    public List<String> getRequiredSkills() {
+        return requiredSkills;
+    }
+
+    public List<Employee> getAllocatedEmployees() {
+        return allocatedEmployees;
+    }
+
+    public void allocateEmployee(Employee employee) {
+        if (allocatedEmployees.size() < maxEmployees && employee.getAllocatedProject() == null && hasRequiredSkills(employee)) {
+            allocatedEmployees.add(employee);
+            employee.setAllocatedProject(this);
+            System.out.println("Employee " + employee.getEmployeeName() + " has been allocated to Project " + projectName);
+        } else {
+            System.out.println("Allocation failed for Employee " + employee.getEmployeeName() + " to Project " + projectName);
+        }
+    }
+
+    private boolean hasRequiredSkills(Employee employee) {
+        int count = 0;
+        for (String skill : requiredSkills) {
+            if (employee.getTechnicalSkills().contains(skill)) {
+                count++;
+            }
+        }
+        return count >= 2;
+    }
+}
+
+public class EmployeeProjectAllocationApp {
+    public static void
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class EmployeeProjectAllocationApp {
+    public static void main(String[] args) {
+        // Create employees
+        Employee employee1 = new PermanentEmployee(1, "John Doe", 5, Arrays.asList("Java", "SQL"), LocalDate.of(2018, 5, 10));
+        Employee employee2 = new ContractualEmployee(2, "Jane Smith", 3, Arrays.asList("Python", "C++"), LocalDate.of(2020, 9, 15));
+        Employee employee3 = new PermanentEmployee(3, "Michael Johnson", 7, Arrays.asList("Java", "JavaScript"), LocalDate.of(2015, 3, 25));
+        Employee employee4 = new PermanentEmployee(4, "Emily Davis", 2, Arrays.asList("Python", "HTML"), LocalDate.of(2022, 1, 7));
+        Employee employee5 = new ContractualEmployee(5, "David Wilson", 4, Arrays.asList("C++", "JavaScript"), LocalDate.of(2021, 8, 12));
+
+        // Create projects
+        Project project1 = new Project("Project A", LocalDate.of(2023, 7, 1), LocalDate.of(2023, 12, 31), 3, Arrays.asList("Java", "SQL"));
+        Project project2 = new Project("Project B", LocalDate.of(2023, 7, 1), LocalDate.of(2023, 11, 30), 2, Arrays.asList("Python", "C++"));
+
+        // Allocate employees to projects
+        project1.allocateEmployee(employee1);
+        project1.allocateEmployee(employee2);
+        project1.allocateEmployee(employee3);
+        project2.allocateEmployee(employee4);
+        project2.allocateEmployee(employee5);
+
+        // Print allocated employees for each project
+        System.out.println("Allocated employees for Project " + project1.getProjectName() + ":");
+        for (Employee employee : project1.getAllocatedEmployees()) {
+            System.out.println("- " + employee.getEmployeeName());
+        }
+
+        System.out.println("\nAllocated employees for Project " + project2.getProjectName() + ":");
+        for (Employee employee : project2.getAllocatedEmployees()) {
+            System.out.println("- " + employee.getEmployeeName());
+        }
+    }
+}
+
+
+
+
+
 Create an Employee Project Allocation Application. The employee can be of two types - Contractual and Permanent.
 
 Employee will have the below mentioned details:
