@@ -1,4 +1,60 @@
 
+Student
+
+-rollNo: int
+
+-dept String
+
+getters
+
+settters
+
+Person
+
+-name: String gender char
+
+state. String
+
+getters
+
+setters
+
+Faculty
+
+-qualification String -experience double
+
+getters setters
+
+Department
+
+dName: String
+
+-dCapacity int dFaculty Faculty
+
+dStudents: ArrayList<Student
+
+getters setters
+
+addStudent(Student) int
+
+upgradeFaculty(String. Faculty) boolean getStudentCountFromState(String) int
+
+College
+
+-cName String cCity String
+
+cDepts ArrayList<Department-
+
+getters
+
+setters
+
++addDepartment String int Faculty int
+
+
+
+
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
